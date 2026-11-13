@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C++ 笔面试笔记 · Menghan Studio</title>
+<meta name="description" content="C++ 笔面试的十个经典问题：delete 与 delete[]、纯虚函数与虚函数、只能用初始化列表的场景、类型安全、内存分配方式、const 与 #define、数组与指针、inline 的开销。">
+<meta name="author" content="MenghanStudio">
+<meta name="keywords" content="嵌入式, Rust, RTOS, C++, 操作系统, 读书笔记, 马列毛, 个人博客, MenghanStudio">
+<link rel="canonical" href="https://llllishuo.github.io/posts/interview-cpp/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Menghan Studio">
+<meta property="og:title" content="C++ 笔面试笔记 · Menghan Studio">
+<meta property="og:description" content="C++ 笔面试的十个经典问题：delete 与 delete[]、纯虚函数与虚函数、只能用初始化列表的场景、类型安全、内存分配方式、const 与 #define、数组与指针、inline 的开销。">
+<meta property="og:url" content="https://llllishuo.github.io/posts/interview-cpp/">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#f6f3ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Menghan Studio" href="/feed.xml">
+<link rel="stylesheet" href="/assets/css/pygments.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<script>(function(){try{
+var p=new URLSearchParams(location.search).get('theme');
+if(p==='dark'||p==='light'){localStorage.setItem('ms-theme',p);}
+var t=(p==='dark'||p==='light')?p:localStorage.getItem('ms-theme');
+if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
+</head>
+<body class="has-post">
+<a class="skip-link" href="#main">跳到正文</a>
+
+<header class="site-head">
+  <div class="wrap head-row">
+    <a class="brand" href="/" aria-label="Menghan Studio 首页">
+      <span class="brand-mark">孟</span>
+      <span class="brand-text">
+        <strong>Menghan Studio</strong>
+        <em>代码 · 读书 · 折腾</em>
+      </span>
+    </a>
+    <nav class="nav" id="site-nav"><a href="/posts/" class="is-active">文章</a><a href="/categories/">分类</a><a href="/projects/">项目</a><a href="/about/">关于</a></nav>
+    <div class="head-actions">
+      <button class="icon-btn" id="theme-toggle" type="button"
+              aria-label="切换深色/浅色模式" title="切换深色/浅色模式">
+        <span class="ico-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg></span><span class="ico-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z"/></svg></span>
+      </button>
+      <button class="icon-btn menu-btn" id="menu-toggle" type="button"
+              aria-label="展开导航" aria-expanded="false" aria-controls="site-nav"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main">
+
+<article class="post">
+  <header class="post-head wrap" style="--chip-hue:22">
+    <a class="back-link" href="/posts/">← 全部文章</a>
+    <div class="post-meta-row">
+      <a class="chip" href="/categories/interview/" style="--chip-hue:22">笔面试</a>
+      <time datetime="2024-11-02">2024 年 11 月 2 日</time>
+      <span class="dot">·</span><span class="muted">1 分钟阅读</span>
+    </div>
+    <h1>C++ 笔面试笔记</h1>
+    <p class="post-sub">delete、虚函数、初始化列表、内存分配、inline 等十个问题</p>
+  </header>
+  <div class="wrap post-layout">
+    <div class="prose"><h2 id="1-delete-delete">1. delete &amp; delete[]</h2>
+<p>在基础类型中作用是一样的，都是释放目标指向的内存delete 只会调用第一个地址的析构
+但是在自定义类型中例如对象数组delete[]会逐一释放每个地址指向的内存调用每个地址的析构</p>
+<h2 id="2-纯虚函数与虚函数">2. 纯虚函数与虚函数</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">area</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">area</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"this is b.area()"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+
+<h2 id="3-有哪几种情况只能用intialization-list-而不能用assignment">3. 有哪几种情况只能用intialization list 而不能用assignment</h2>
+<p>在执行构造函数初始化成员变量的时候</p>
+<h2 id="4-c-是不是类型安全的">4. C++是不是类型安全的</h2>
+<p>静态类型语言会在编译时强行进行类型检查</p>
+<h2 id="5-main-函数执行以前-还会执行什么代码">5. main 函数执行以前，还会执行什么代码？</h2>
+<p>初始化全局变量静态变量
+设置执行环境，内存堆栈等
+清理未初始化的全局变量
+声明入口函数并调用init函数
+处理命令行参数</p>
+<h2 id="6-描述内存分配方式以及它们的区别">6. 描述内存分配方式以及它们的区别?</h2>
+<p>静态分配、动态分配
+前者会在编译阶段确定好内存大小并以固定大小分配地址，可分配在栈或者堆中，系统可以执行进行管理释放
+后者只有在运行时才能确定内存大小，使用一般分配在堆中，需要手动管理释放，相较于静态分配更灵活</p>
+<h2 id="7-请说出const与-define-相比-有何优点">7. 请说出const与#define 相比，有何优点？</h2>
+<p>const 是常量，被定义在全局区，有地址，可控，更安全
+而#define 是一种字符串替换，再预编译阶段对需要的字段进行替换，相较于const更易于维护</p>
+<h2 id="8-数组与指针">8. 数组与指针</h2>
+<p>指针代表指向的内存地址
+数组就是指针，只不过数组代表一串连续的指针，从数组索引0位置开始</p>
+<h2 id="9-int-s-10-int">9. int (*s[10])(int);</h2>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">s</span><span class="p">[</span><span class="mi">10</span><span class="p">])(</span><span class="kt">int</span><span class="p">);</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="mi">1</span><span class="p">);</span>
+</code></pre></div>
+
+<h2 id="10-内联函数-inline">10. 内联函数 inline</h2>
+<p>内敛是编译时
+作用类似于宏，替换函数调用为函数体内容即内敛展开
+其中一般不包括循环、递归等复杂操作</p>
+<p>类内隐性内敛
+类外显性内敛</p>
+<p>内敛展开是会进行安全检查和自动类型转换
+缺点：
+代码膨胀
+inline函数改变需要重新编译</p>
+<p>ps: 虚函数可以内敛，但表现为多态时不能内敛</p></div>
+    
+  <aside class="post-toc" aria-label="目录">
+    <p class="toc-title">目录</p>
+    <ul>
+<li><a href="#1-delete-delete">1. delete &amp; delete[]</a></li>
+<li><a href="#2-纯虚函数与虚函数">2. 纯虚函数与虚函数</a></li>
+<li><a href="#3-有哪几种情况只能用intialization-list-而不能用assignment">3. 有哪几种情况只能用intialization list 而不能用assignment</a></li>
+<li><a href="#4-c-是不是类型安全的">4. C++是不是类型安全的</a></li>
+<li><a href="#5-main-函数执行以前-还会执行什么代码">5. main 函数执行以前，还会执行什么代码？</a></li>
+<li><a href="#6-描述内存分配方式以及它们的区别">6. 描述内存分配方式以及它们的区别?</a></li>
+<li><a href="#7-请说出const与-define-相比-有何优点">7. 请说出const与#define 相比，有何优点？</a></li>
+<li><a href="#8-数组与指针">8. 数组与指针</a></li>
+<li><a href="#9-int-s-10-int">9. int (*s[10])(int);</a></li>
+<li><a href="#10-内联函数-inline">10. 内联函数 inline</a></li>
+</ul>
+  </aside>
+  </div>
+  <footer class="wrap post-foot">
+    <div class="tag-row"><a class="tag" href="/tags/#tag-c++">#c++</a><a class="tag" href="/tags/#tag-笔记">#笔记</a><a class="tag" href="/tags/#tag-笔面试题">#笔面试题</a></div>
+    <div class="post-nav"><a class="post-nav-item prev" href="/posts/interview-rtos/"><span class="k">← 上一篇</span><strong>RTOS 笔面试笔记</strong></a><a class="post-nav-item next" href="/posts/mao-life/"><span class="k">下一篇 →</span><strong>用毛选回顾教员的一生</strong></a></div>
+  </footer>
+</article>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-row">
+    <div class="foot-brand">
+      <span class="brand-mark small">孟</span>
+      <p>Menghan Studio · 记录学习与思考<br>
+      <span class="muted">本博客内容仅作学习交流</span></p>
+    </div>
+    <div class="foot-links">
+      <a href="/posts/">全部文章</a>
+      <a href="/categories/">分类</a>
+      <a href="/projects/">项目</a>
+      <a href="https://github.com/llllishuo" rel="noopener">GitHub</a>
+      <a href="mailto:1756524586@qq.com">邮箱</a>
+      <a href="/feed.xml">RSS</a>
+    </div>
+  </div>
+  <div class="wrap foot-base">
+    <span>© 2026 MenghanStudio</span>
+    <span>由 Python 生成的静态站点</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>

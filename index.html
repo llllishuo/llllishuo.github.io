@@ -1,42 +1,234 @@
----
-layout: page
-description: "本博客内容仅作学习交流  如有疑问请咨询邮箱"
----
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menghan Studio</title>
+<meta name="description" content="MenghanStudio 的个人主页：嵌入式与系统方向的开发笔记、笔面试整理、马列毛经典读书笔记，以及自己动手做的小工具。">
+<meta name="author" content="MenghanStudio">
+<meta name="keywords" content="嵌入式, Rust, RTOS, C++, 操作系统, 读书笔记, 马列毛, 个人博客, MenghanStudio">
+<link rel="canonical" href="https://llllishuo.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Menghan Studio">
+<meta property="og:title" content="Menghan Studio">
+<meta property="og:description" content="MenghanStudio 的个人主页：嵌入式与系统方向的开发笔记、笔面试整理、马列毛经典读书笔记，以及自己动手做的小工具。">
+<meta property="og:url" content="https://llllishuo.github.io/">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#f6f3ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Menghan Studio" href="/feed.xml">
+<link rel="stylesheet" href="/assets/css/pygments.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<script>(function(){try{
+var p=new URLSearchParams(location.search).get('theme');
+if(p==='dark'||p==='light'){localStorage.setItem('ms-theme',p);}
+var t=(p==='dark'||p==='light')?p:localStorage.getItem('ms-theme');
+if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 
-{% for post in paginator.posts %}
-<div class="post-preview">
-    <a href="{{ post.url | prepend: site.baseurl }}">
-        <h2 class="post-title">
-            {{ post.title }}
-        </h2>
-        {% if post.subtitle %}
-        <h3 class="post-subtitle">
-            {{ post.subtitle }}
-        </h3>
-        {% endif %}
-        <div class="post-content-preview">
-            {{ post.content | strip_html | truncate:200 }}
-        </div>
+</head>
+<body class="">
+<a class="skip-link" href="#main">跳到正文</a>
+
+<header class="site-head">
+  <div class="wrap head-row">
+    <a class="brand" href="/" aria-label="Menghan Studio 首页">
+      <span class="brand-mark">孟</span>
+      <span class="brand-text">
+        <strong>Menghan Studio</strong>
+        <em>代码 · 读书 · 折腾</em>
+      </span>
     </a>
-    <p class="post-meta">
-        Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
-    </p>
-</div>
-<hr>
-{% endfor %}
+    <nav class="nav" id="site-nav"><a href="/posts/">文章</a><a href="/categories/">分类</a><a href="/projects/">项目</a><a href="/about/">关于</a></nav>
+    <div class="head-actions">
+      <button class="icon-btn" id="theme-toggle" type="button"
+              aria-label="切换深色/浅色模式" title="切换深色/浅色模式">
+        <span class="ico-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg></span><span class="ico-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z"/></svg></span>
+      </button>
+      <button class="icon-btn menu-btn" id="menu-toggle" type="button"
+              aria-label="展开导航" aria-expanded="false" aria-controls="site-nav"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main">
 
-<!-- Pager -->
-{% if paginator.total_pages > 1 %}
-<ul class="pager">
-    {% if paginator.previous_page %}
-    <li class="previous">
-        <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr; Newer Posts</a>
-    </li>
-    {% endif %}
-    {% if paginator.next_page %}
-    <li class="next">
-        <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Older Posts &rarr;</a>
-    </li>
-    {% endif %}
-</ul>
-{% endif %}
+<section class="hero">
+  <div class="wrap hero-inner">
+    <p class="kicker">Menghan Studio · 个人主页</p>
+    <h1>写一点代码，<br>读一点书。</h1>
+    <p class="hero-lead">
+      嵌入式与系统方向的学习记录：内存管理、Rust / C++ / RTOS 的笔面试整理，
+      马列毛经典原著的读书笔记，以及几个自己动手做的小工具。
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="/posts/">开始阅读 <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn-ghost" href="/projects/">看项目</a>
+    </div>
+    <dl class="hero-stats">
+      <div><dt>文章</dt><dd>9</dd></div>
+      <div><dt>项目</dt><dd>2</dd></div>
+      <div><dt>分类</dt><dd>4</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="section wrap">
+  <div class="section-head"><h2>项目</h2><a class="more-link" href="/projects/">全部项目<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a></div>
+  <div class="project-grid">
+    
+<a class="project-card" href="/projects/fuckoff/" style="--card-accent:#3f8f74">
+  <div class="card-visual">
+    <div class="card-glow"></div>
+    <img class="card-shot" src="/assets/img/projects/fuckoff/card.jpg" alt="FuckOff 界面预览" loading="lazy">
+  </div>
+  <div class="card-body">
+    <div class="badge-row"><span class="badge">Android</span><span class="badge">Java</span><span class="badge">Apache-2.0</span><span class="badge">零网络权限</span></div>
+    <h3>FuckOff</h3>
+    <p>你把自己选中的应用加入黑名单，之后只要它们出现在手机上，就自动卸载或提醒你确认。纯本地运行，没有申请网络权限。</p>
+    <span class="card-more">查看介绍与演示 <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+  </div>
+</a>
+<a class="project-card" href="/projects/hourlywage/" style="--card-accent:#2b6f9e">
+  <div class="card-visual">
+    <div class="card-glow"></div>
+    <img class="card-shot" src="/assets/img/projects/hourlywage/card.jpg" alt="时薪计算器 界面预览" loading="lazy">
+  </div>
+  <div class="card-body">
+    <div class="badge-row"><span class="badge">Windows</span><span class="badge">网页</span><span class="badge">Linux / macOS</span><span class="badge">单文件零依赖</span></div>
+    <h3>时薪计算器</h3>
+    <p>填 4 个数，中间那个大数字就是时薪——边填边算，没有按钮。Windows / 网页 / 终端三端同一套公式与进位规则，结果逐条比对一致。</p>
+    <span class="card-more">查看介绍与演示 <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+  </div>
+</a>
+  </div>
+</section>
+
+<section class="section wrap">
+  <div class="section-head"><h2>最新文章</h2><a class="more-link" href="/posts/">全部文章<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a></div>
+  <div class="post-list">
+    
+<article class="post-row" data-cat="special"
+         data-search="用毛选回顾教员的一生 放弃幻想，准备斗争 特殊专题 马列毛 毛泽东">
+  <a class="post-row-main" href="/posts/mao-life/">
+    <div class="post-row-meta">
+      <a class="chip" href="/categories/special/" style="--chip-hue:268">专题</a>
+      <time datetime="2024-11-04">2024 年 11 月 4 日</time>
+      <span class="dot">·</span><span class="muted">1 分钟</span>
+    </div>
+    <h3>用毛选回顾教员的一生</h3>
+    <p class="post-row-sub">放弃幻想，准备斗争</p>
+    <p class="post-row-excerpt">以《毛泽东选集》1–7 卷为线索，按时间顺序把几个阶段串起来看。这篇专题还在整理，先把所用书目放出来。</p>
+    <div class="tag-row"><span class="tag">#特殊专题</span><span class="tag">#马列毛</span><span class="tag">#毛泽东</span></div>
+  </a>
+</article>
+<article class="post-row" data-cat="interview"
+         data-search="c++ 笔面试笔记 delete、虚函数、初始化列表、内存分配、inline 等十个问题 c++ 笔记 笔面试题">
+  <a class="post-row-main" href="/posts/interview-cpp/">
+    <div class="post-row-meta">
+      <a class="chip" href="/categories/interview/" style="--chip-hue:22">笔面试</a>
+      <time datetime="2024-11-02">2024 年 11 月 2 日</time>
+      <span class="dot">·</span><span class="muted">1 分钟</span>
+    </div>
+    <h3>C++ 笔面试笔记</h3>
+    <p class="post-row-sub">delete、虚函数、初始化列表、内存分配、inline 等十个问题</p>
+    <p class="post-row-excerpt">C++ 笔面试的十个经典问题：delete 与 delete[]、纯虚函数与虚函数、只能用初始化列表的场景、类型安全、内存分配方式、const 与 #define、数组与指针、inline 的开销。</p>
+    <div class="tag-row"><span class="tag">#c++</span><span class="tag">#笔记</span><span class="tag">#笔面试题</span></div>
+  </a>
+</article>
+<article class="post-row" data-cat="interview"
+         data-search="rtos 笔面试笔记 前后台程序、可剥夺内核、可重入、volatile、临界区与 ucos/freertos 三十问 rtos 笔记 笔面试题">
+  <a class="post-row-main" href="/posts/interview-rtos/">
+    <div class="post-row-meta">
+      <a class="chip" href="/categories/interview/" style="--chip-hue:22">笔面试</a>
+      <time datetime="2024-11-02">2024 年 11 月 2 日</time>
+      <span class="dot">·</span><span class="muted">6 分钟</span>
+    </div>
+    <h3>RTOS 笔面试笔记</h3>
+    <p class="post-row-sub">前后台程序、可剥夺内核、可重入、volatile、临界区与 uCOS/FreeRTOS 三十问</p>
+    <p class="post-row-excerpt">三十道 RTOS 笔面试题的整理：前后台程序与实时系统的区别、可剥夺型内核、可重入函数、volatile 的用法、临界区与自旋锁、uCOS 任务状态与 FreeRTOS 调度方式。</p>
+    <div class="tag-row"><span class="tag">#RTOS</span><span class="tag">#笔记</span><span class="tag">#笔面试题</span></div>
+  </a>
+</article>
+<article class="post-row" data-cat="interview"
+         data-search="rust 笔面试笔记 所有权、drop、copy/move、sized/send/sync、闭包、泛型与并发 rust 笔记 笔面试题">
+  <a class="post-row-main" href="/posts/interview-rust/">
+    <div class="post-row-meta">
+      <a class="chip" href="/categories/interview/" style="--chip-hue:22">笔面试</a>
+      <time datetime="2024-11-02">2024 年 11 月 2 日</time>
+      <span class="dot">·</span><span class="muted">3 分钟</span>
+    </div>
+    <h3>Rust 笔面试笔记</h3>
+    <p class="post-row-sub">所有权、Drop、Copy/Move、Sized/Send/Sync、闭包、泛型与并发</p>
+    <p class="post-row-excerpt">Rust 笔面试的知识地图：所有权与借用、Drop 的实现与丢弃顺序、Copy 与 Move 的边界、Deref、切片与迭代器、三种闭包 Trait、PhantomData，以及用 CAS 手写一把自旋锁。</p>
+    <div class="tag-row"><span class="tag">#Rust</span><span class="tag">#笔记</span><span class="tag">#笔面试题</span></div>
+  </a>
+</article>
+<article class="post-row" data-cat="interview"
+         data-search="笔试题记录 · 综合 rust 所有权问答、手写 my_vec! 宏等真题实现 笔试 rust 笔面试题">
+  <a class="post-row-main" href="/posts/written-test-mixed/">
+    <div class="post-row-meta">
+      <a class="chip" href="/categories/interview/" style="--chip-hue:22">笔面试</a>
+      <time datetime="2024-11-02">2024 年 11 月 2 日</time>
+      <span class="dot">·</span><span class="muted">1 分钟</span>
+    </div>
+    <h3>笔试题记录 · 综合</h3>
+    <p class="post-row-sub">Rust 所有权问答、手写 my_vec! 宏等真题实现</p>
+    <p class="post-row-excerpt">几道笔试真题的完整回答：怎么讲清楚 Rust 的所有权系统，以及用 macro_rules! 实现一个和 vec![] 用法一致的 my_vec! 宏。</p>
+    <div class="tag-row"><span class="tag">#笔试</span><span class="tag">#Rust</span><span class="tag">#笔面试题</span></div>
+  </a>
+</article>
+  </div>
+</section>
+
+<section class="section wrap">
+  <div class="section-head"><h2>按分类浏览</h2><a class="more-link" href="/categories/">分类总览<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a></div>
+  <div class="cat-grid">
+    <a class="cat-tile" href="/categories/dev/" style="--chip-hue:210">
+      <span class="cat-count">01</span>
+      <span class="cat-name">开发笔记</span>
+      <span class="cat-desc">操作系统、内存管理、语言与工具链——踩过的坑和想明白的原理。</span>
+    </a>
+    <a class="cat-tile" href="/categories/interview/" style="--chip-hue:22">
+      <span class="cat-count">04</span>
+      <span class="cat-name">笔面试</span>
+      <span class="cat-desc">C++ / Rust / RTOS 的笔试题、面试题与答题思路整理。</span>
+    </a>
+    <a class="cat-tile" href="/categories/reading/" style="--chip-hue:348">
+      <span class="cat-count">03</span>
+      <span class="cat-name">读书笔记</span>
+      <span class="cat-desc">马克思、恩格斯、列宁、毛泽东经典原著的摘录与批注。</span>
+    </a>
+    <a class="cat-tile" href="/categories/special/" style="--chip-hue:268">
+      <span class="cat-count">01</span>
+      <span class="cat-name">专题</span>
+      <span class="cat-desc">长线整理的专题：用一套材料把一条线索串起来。</span>
+    </a></div>
+</section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-row">
+    <div class="foot-brand">
+      <span class="brand-mark small">孟</span>
+      <p>Menghan Studio · 记录学习与思考<br>
+      <span class="muted">本博客内容仅作学习交流</span></p>
+    </div>
+    <div class="foot-links">
+      <a href="/posts/">全部文章</a>
+      <a href="/categories/">分类</a>
+      <a href="/projects/">项目</a>
+      <a href="https://github.com/llllishuo" rel="noopener">GitHub</a>
+      <a href="mailto:1756524586@qq.com">邮箱</a>
+      <a href="/feed.xml">RSS</a>
+    </div>
+  </div>
+  <div class="wrap foot-base">
+    <span>© 2026 MenghanStudio</span>
+    <span>由 Python 生成的静态站点</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>

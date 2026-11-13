@@ -1,30 +1,83 @@
----
-layout: null
----
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>{{ site.title | xml_escape }}</title>
-    <description>{{ site.description | xml_escape }}</description>
-    <link>{{ site.url }}{{ site.baseurl }}/</link>
-    <atom:link href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}" rel="self" type="application/rss+xml" />
-    <pubDate>{{ site.time | date_to_rfc822 }}</pubDate>
-    <lastBuildDate>{{ site.time | date_to_rfc822 }}</lastBuildDate>
-    <generator>Jekyll v{{ jekyll.version }}</generator>
-    {% for post in site.posts limit:10 %}
-      <item>
-        <title>{{ post.title | xml_escape }}</title>
-        <description>{{ post.content | xml_escape }}</description>
-        <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
-        <link>{{ post.url | prepend: site.baseurl | prepend: site.url }}</link>
-        <guid isPermaLink="true">{{ post.url | prepend: site.baseurl | prepend: site.url }}</guid>
-        {% for tag in post.tags %}
-        <category>{{ tag | xml_escape }}</category>
-        {% endfor %}
-        {% for cat in post.categories %}
-        <category>{{ cat | xml_escape }}</category>
-        {% endfor %}
-      </item>
-    {% endfor %}
-  </channel>
+<channel>
+  <title>Menghan Studio</title>
+  <link>https://llllishuo.github.io/</link>
+  <description>MenghanStudio 的个人主页：嵌入式与系统方向的开发笔记、笔面试整理、马列毛经典读书笔记，以及自己动手做的小工具。</description>
+  <language>zh-CN</language>
+  <lastBuildDate>Fri, 13 Nov 2026 16:40:36 +0800</lastBuildDate>
+  <atom:link href="https://llllishuo.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+  <item>
+    <title>用毛选回顾教员的一生</title>
+    <link>https://llllishuo.github.io/posts/mao-life/</link>
+    <guid isPermaLink="true">https://llllishuo.github.io/posts/mao-life/</guid>
+    <pubDate>Mon, 04 Nov 2024 00:00:00 +0800</pubDate>
+    <category>专题</category>
+    <description>以《毛泽东选集》1–7 卷为线索，按时间顺序把几个阶段串起来看。这篇专题还在整理，先把所用书目放出来。</description>
+  </item>
+  <item>
+    <title>C++ 笔面试笔记</title>
+    <link>https://llllishuo.github.io/posts/interview-cpp/</link>
+    <guid isPermaLink="true">https://llllishuo.github.io/posts/interview-cpp/</guid>
+    <pubDate>Sat, 02 Nov 2024 00:00:00 +0800</pubDate>
+    <category>笔面试</category>
+    <description>C++ 笔面试的十个经典问题：delete 与 delete[]、纯虚函数与虚函数、只能用初始化列表的场景、类型安全、内存分配方式、const 与 #define、数组与指针、inline 的开销。</description>
+  </item>
+  <item>
+    <title>RTOS 笔面试笔记</title>
+    <link>https://llllishuo.github.io/posts/interview-rtos/</link>
+    <guid isPermaLink="true">https://llllishuo.github.io/posts/interview-rtos/</guid>
+    <pubDate>Sat, 02 Nov 2024 00:00:00 +0800</pubDate>
+    <category>笔面试</category>
+    <description>三十道 RTOS 笔面试题的整理：前后台程序与实时系统的区别、可剥夺型内核、可重入函数、volatile 的用法、临界区与自旋锁、uCOS 任务状态与 FreeRTOS 调度方式。</description>
+  </item>
+  <item>
+    <title>Rust 笔面试笔记</title>
+    <link>https://llllishuo.github.io/posts/interview-rust/</link>
+    <guid isPermaLink="true">https://llllishuo.github.io/posts/interview-rust/</guid>
+    <pubDate>Sat, 02 Nov 2024 00:00:00 +0800</pubDate>
+    <category>笔面试</category>
+    <description>Rust 笔面试的知识地图：所有权与借用、Drop 的实现与丢弃顺序、Copy 与 Move 的边界、Deref、切片与迭代器、三种闭包 Trait、PhantomData，以及用 CAS 手写一把自旋锁。</description>
+  </item>
+  <item>
+    <title>笔试题记录 · 综合</title>
+    <link>https://llllishuo.github.io/posts/written-test-mixed/</link>
+    <guid isPermaLink="true">https://llllishuo.github.io/posts/written-test-mixed/</guid>
+    <pubDate>Sat, 02 Nov 2024 00:00:00 +0800</pubDate>
+    <category>笔面试</category>
+    <description>几道笔试真题的完整回答：怎么讲清楚 Rust 的所有权系统，以及用 macro_rules! 实现一个和 vec![] 用法一致的 my_vec! 宏。</description>
+  </item>
+  <item>
+    <title>读书笔记：《反对本本主义》</title>
+    <link>https://llllishuo.github.io/posts/oppose-book-worship/</link>
+    <guid isPermaLink="true">https://llllishuo.github.io/posts/oppose-book-worship/</guid>
+    <pubDate>Sun, 27 Oct 2024 00:00:00 +0800</pubDate>
+    <category>读书笔记</category>
+    <description>「没有调查，没有发言权。」1930 年这篇文章批的是照抄照搬，讲的是调查研究——为什么结论必须从实际材料里长出来。</description>
+  </item>
+  <item>
+    <title>开发备忘录：内核怎么访问页表</title>
+    <link>https://llllishuo.github.io/posts/dev-memo/</link>
+    <guid isPermaLink="true">https://llllishuo.github.io/posts/dev-memo/</guid>
+    <pubDate>Sat, 26 Oct 2024 00:00:00 +0800</pubDate>
+    <category>开发笔记</category>
+    <description>写操作系统时绕不开的问题：已经开了分页，内核自己又怎么去读写页表？五种做法各自的思路、图示和代价，外加一份 Git 分支速查。</description>
+  </item>
+  <item>
+    <title>读书笔记：《雇佣劳动与资本》</title>
+    <link>https://llllishuo.github.io/posts/wage-labour-and-capital/</link>
+    <guid isPermaLink="true">https://llllishuo.github.io/posts/wage-labour-and-capital/</guid>
+    <pubDate>Sat, 26 Oct 2024 00:00:00 +0800</pubDate>
+    <category>读书笔记</category>
+    <description>马克思 1847 年的讲稿：工资到底是什么？劳动和劳动力有什么区别？为什么说「工资是劳动力价值的转化形式」，而不是「劳动的价格」。</description>
+  </item>
+  <item>
+    <title>读书笔记：《共产主义运动中的左派幼稚病》</title>
+    <link>https://llllishuo.github.io/posts/left-wing-communism/</link>
+    <guid isPermaLink="true">https://llllishuo.github.io/posts/left-wing-communism/</guid>
+    <pubDate>Fri, 25 Oct 2024 00:00:00 +0800</pubDate>
+    <category>读书笔记</category>
+    <description>列宁 1920 年写的小册子，专门对付「左派幼稚病」：领袖、政党、阶级、群众到底是什么关系，为什么必须在反动工会里做工作。</description>
+  </item>
+</channel>
 </rss>

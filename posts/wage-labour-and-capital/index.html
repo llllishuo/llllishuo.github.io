@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>读书笔记：《雇佣劳动与资本》 · Menghan Studio</title>
+<meta name="description" content="马克思 1847 年的讲稿：工资到底是什么？劳动和劳动力有什么区别？为什么说「工资是劳动力价值的转化形式」，而不是「劳动的价格」。">
+<meta name="author" content="MenghanStudio">
+<meta name="keywords" content="嵌入式, Rust, RTOS, C++, 操作系统, 读书笔记, 马列毛, 个人博客, MenghanStudio">
+<link rel="canonical" href="https://llllishuo.github.io/posts/wage-labour-and-capital/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Menghan Studio">
+<meta property="og:title" content="读书笔记：《雇佣劳动与资本》 · Menghan Studio">
+<meta property="og:description" content="马克思 1847 年的讲稿：工资到底是什么？劳动和劳动力有什么区别？为什么说「工资是劳动力价值的转化形式」，而不是「劳动的价格」。">
+<meta property="og:url" content="https://llllishuo.github.io/posts/wage-labour-and-capital/">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#f6f3ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Menghan Studio" href="/feed.xml">
+<link rel="stylesheet" href="/assets/css/pygments.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<script>(function(){try{
+var p=new URLSearchParams(location.search).get('theme');
+if(p==='dark'||p==='light'){localStorage.setItem('ms-theme',p);}
+var t=(p==='dark'||p==='light')?p:localStorage.getItem('ms-theme');
+if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
+</head>
+<body class="has-post">
+<a class="skip-link" href="#main">跳到正文</a>
+
+<header class="site-head">
+  <div class="wrap head-row">
+    <a class="brand" href="/" aria-label="Menghan Studio 首页">
+      <span class="brand-mark">孟</span>
+      <span class="brand-text">
+        <strong>Menghan Studio</strong>
+        <em>代码 · 读书 · 折腾</em>
+      </span>
+    </a>
+    <nav class="nav" id="site-nav"><a href="/posts/" class="is-active">文章</a><a href="/categories/">分类</a><a href="/projects/">项目</a><a href="/about/">关于</a></nav>
+    <div class="head-actions">
+      <button class="icon-btn" id="theme-toggle" type="button"
+              aria-label="切换深色/浅色模式" title="切换深色/浅色模式">
+        <span class="ico-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg></span><span class="ico-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z"/></svg></span>
+      </button>
+      <button class="icon-btn menu-btn" id="menu-toggle" type="button"
+              aria-label="展开导航" aria-expanded="false" aria-controls="site-nav"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main">
+
+<article class="post">
+  <header class="post-head wrap" style="--chip-hue:348">
+    <a class="back-link" href="/posts/">← 全部文章</a>
+    <div class="post-meta-row">
+      <a class="chip" href="/categories/reading/" style="--chip-hue:348">读书笔记</a>
+      <time datetime="2024-10-26">2024 年 10 月 26 日</time>
+      <span class="dot">·</span><span class="muted">4 分钟阅读</span>
+    </div>
+    <h1>读书笔记：《雇佣劳动与资本》</h1>
+    <p class="post-sub">马克思 · 1891 年发表版本</p>
+  </header>
+  <div class="wrap post-layout">
+    <div class="prose"><p><img alt="" src="/assets/img/posts/读书笔记-雇佣劳动与资本/202410261231975.jpg">
+<img alt="" src="/assets/img/posts/读书笔记-雇佣劳动与资本/202410261231976.jpg">
+<img alt="" src="/assets/img/posts/读书笔记-雇佣劳动与资本/202410261231977.jpg"></p>
+<p>工人在拿到自己应有的报酬之后都是在为资本家无偿工作</p>
+<p>【假设：生产一瓶水机器原料等费用10元，工人拿到2元，工人一天工作12小时，资本家卖出这瓶水一定要利润假设卖了14元，也就是说2元资本家要放自己口袋，因此工人工作12小时要创造出4元才能符合资本家的标准，那么6小时就已经创造2元了剩下的6小时完全在为资本家白白工作】</p>
+<p>随着科技的发展生产力的提升，工人自己的那一部分只会增加的缓慢或者不变甚至减少，而商品却不会减少，因此就造成了产能过剩，社会大部分财富在极少数人手中，普通人却没有能力消费过剩的商品，以至于只能将过剩的商品对外输出……（涉及到其他部分、以后会说）</p>
+<p>这就是市场经济的弊端，要想挽救这种情况，只能是计划经济，确保每人都有同等的得到生产资料、生活资料、享受资料等的能力</p>
+<p>虽然开始会是艰难的但是属于无产者的那一天终究会到来</p>
+<p><img alt="" src="/assets/img/posts/读书笔记-雇佣劳动与资本/202410261233460.jpg">
+<img alt="" src="/assets/img/posts/读书笔记-雇佣劳动与资本/202410261233461.jpg">
+<img alt="" src="/assets/img/posts/读书笔记-雇佣劳动与资本/202410261233462.jpg">
+<img alt="" src="/assets/img/posts/读书笔记-雇佣劳动与资本/202410261233463.jpg"></p>
+<p>无产阶级是提供劳动力的阶级，资本是购买劳动力榨取利润的商品购买者。
+根据之前提到的，劳动报酬是低于生产价值的，因为资本需要拿到一部分利润。
+我们只能拿到最低工资以保障资本拿到最高的利润，而我们的工资绝大多数将消费出去为了维持自己的生存或者延续后代，因此留在手里的所剩无几或者是全部归还资本了。所以说在市场经济体制下产能过剩是必然的、经济危机是不可避免的，越是发展人们越是无法消费社会生产出来的大量商品。</p>
+<blockquote>
+<p>补充：
+关于计划经济
+仿佛大多数至少是像以前如我一样学生的认识一样，对计划经济的认识负面评价居多，所以这里需要解释一下，发表一下个人见解。
+计划经济指的是生产消费各方面按政府计划来，因此就会产生经济不够活性、经济发展缓慢等的误区。所以第一点公有制下计划经济体制的政府是什么的政府，这也是最关键的一点，只有无产阶级专政的政府才是真正的计划经济的政府才能根本保障人民的基本生存条件即最低工资即维持个人生活和延续后代的能力。那些说不够活性和创造性的试想市场经济体制下，谁又能在难以维持个人生活甚至无法延续后代的条件下保持自己的创造性、积极性呢！第二点，有人拿出某个历史时期的经济状况举例，这里我想说的是请去查资料了解真正的原因，但是不可否认的是资本带来的生产力的飞速发展是毋庸置疑的，所以我们所说的实现共产主义的第一步建设社会主义就是会妥协一定的资本主义制度，当然这一部分需要严格控制（可以参考国家资本主义），并且对于计划经济的缺点部分也可以依靠资本带来的生产力的高速发展以及自身集中起来的生产力推动的科技进步弥补。因此实际运作中会存在一定的资本主义经济的部分但仍然是计划经济主导、无产阶级民主政府控制的。在这样的时期的阶级斗争需要竭尽全力避免资本复辟、压制回退到资本主义社会的趋势。</p>
+</blockquote>
+<p><img alt="" src="/assets/img/posts/读书笔记-雇佣劳动与资本/202410261234931.jpg">
+<img alt="" src="/assets/img/posts/读书笔记-雇佣劳动与资本/202410261234932.jpg">
+<img alt="" src="/assets/img/posts/读书笔记-雇佣劳动与资本/202410261234933.jpg">
+<img alt="" src="/assets/img/posts/读书笔记-雇佣劳动与资本/202410261234934.jpg"></p>
+<p>根据前面的内容，已知，我们的劳动的一部分才能体现为工资另一部分则是在为资本家无偿劳作
+而我们的那一部分就一定完全受我们支配了吗？不然
+我们需要购入自己所需的生活资料、娱乐资料等，而重新投入市场的资金将变成资本家的资本继续剥削工人阶级
+另外，工资的增加真的代表你可以支配的财富增加了吗？
+首先明确两个概念，相对工资和实际工作
+所谓相对工资代表获得的收入，所谓实际工资代表你的实际消费水平或者能力。
+那么问题就变成了相对工资增加就代表实际工资增加了吗？答案当然是不一定。
+假设，一个月5元，而你这个月消费就是5元，但下一个月你需要的商品涨价了而你的月薪没变，那么你的实际工资就是降低了，如果月薪涨了，但是商品也涨了，那么实际工资可能没变有可能降低了。
+这样就又有新疑问了，怎么样才算实际工资增加了？
+上面的例子只是简单说明，而跟你工资直接产生关系的是资本家的利润。如果工资没有同资本家的利润同比例增加，那么工资一定是就是降低了，相反同比例增加了，那么也和例子中一样是不一定的。当然这里说的是就整体而言，具体到单一例子要具体问题具体分析。</p>
+<p>最后声明一点，一旦有人说资本家的利润增加对工人阶级有利或者是类似于资本家与工人阶级利益是一致的，请先替我扇ta两嘴巴，谢谢。
+工人利益和资本家利益是完全对立的，资本家的利益增加，他对工人阶级剥削的权力就会增加，工人被压迫的现状就更加艰难！</p></div>
+    
+  </div>
+  <footer class="wrap post-foot">
+    <div class="tag-row"><a class="tag" href="/tags/#tag-马列毛">#马列毛</a><a class="tag" href="/tags/#tag-读书笔记">#读书笔记</a><a class="tag" href="/tags/#tag-马克思">#马克思</a><a class="tag" href="/tags/#tag-恩格斯">#恩格斯</a></div>
+    <div class="post-nav"><a class="post-nav-item prev" href="/posts/left-wing-communism/"><span class="k">← 上一篇</span><strong>读书笔记：《共产主义运动中的左派幼稚病》</strong></a><a class="post-nav-item next" href="/posts/dev-memo/"><span class="k">下一篇 →</span><strong>开发备忘录：内核怎么访问页表</strong></a></div>
+  </footer>
+</article>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-row">
+    <div class="foot-brand">
+      <span class="brand-mark small">孟</span>
+      <p>Menghan Studio · 记录学习与思考<br>
+      <span class="muted">本博客内容仅作学习交流</span></p>
+    </div>
+    <div class="foot-links">
+      <a href="/posts/">全部文章</a>
+      <a href="/categories/">分类</a>
+      <a href="/projects/">项目</a>
+      <a href="https://github.com/llllishuo" rel="noopener">GitHub</a>
+      <a href="mailto:1756524586@qq.com">邮箱</a>
+      <a href="/feed.xml">RSS</a>
+    </div>
+  </div>
+  <div class="wrap foot-base">
+    <span>© 2026 MenghanStudio</span>
+    <span>由 Python 生成的静态站点</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>

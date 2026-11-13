@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rust 笔面试笔记 · Menghan Studio</title>
+<meta name="description" content="Rust 笔面试的知识地图：所有权与借用、Drop 的实现与丢弃顺序、Copy 与 Move 的边界、Deref、切片与迭代器、三种闭包 Trait、PhantomData，以及用 CAS 手写一把自旋锁。">
+<meta name="author" content="MenghanStudio">
+<meta name="keywords" content="嵌入式, Rust, RTOS, C++, 操作系统, 读书笔记, 马列毛, 个人博客, MenghanStudio">
+<link rel="canonical" href="https://llllishuo.github.io/posts/interview-rust/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Menghan Studio">
+<meta property="og:title" content="Rust 笔面试笔记 · Menghan Studio">
+<meta property="og:description" content="Rust 笔面试的知识地图：所有权与借用、Drop 的实现与丢弃顺序、Copy 与 Move 的边界、Deref、切片与迭代器、三种闭包 Trait、PhantomData，以及用 CAS 手写一把自旋锁。">
+<meta property="og:url" content="https://llllishuo.github.io/posts/interview-rust/">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#f6f3ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Menghan Studio" href="/feed.xml">
+<link rel="stylesheet" href="/assets/css/pygments.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<script>(function(){try{
+var p=new URLSearchParams(location.search).get('theme');
+if(p==='dark'||p==='light'){localStorage.setItem('ms-theme',p);}
+var t=(p==='dark'||p==='light')?p:localStorage.getItem('ms-theme');
+if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
+</head>
+<body class="has-post">
+<a class="skip-link" href="#main">跳到正文</a>
+
+<header class="site-head">
+  <div class="wrap head-row">
+    <a class="brand" href="/" aria-label="Menghan Studio 首页">
+      <span class="brand-mark">孟</span>
+      <span class="brand-text">
+        <strong>Menghan Studio</strong>
+        <em>代码 · 读书 · 折腾</em>
+      </span>
+    </a>
+    <nav class="nav" id="site-nav"><a href="/posts/" class="is-active">文章</a><a href="/categories/">分类</a><a href="/projects/">项目</a><a href="/about/">关于</a></nav>
+    <div class="head-actions">
+      <button class="icon-btn" id="theme-toggle" type="button"
+              aria-label="切换深色/浅色模式" title="切换深色/浅色模式">
+        <span class="ico-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg></span><span class="ico-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z"/></svg></span>
+      </button>
+      <button class="icon-btn menu-btn" id="menu-toggle" type="button"
+              aria-label="展开导航" aria-expanded="false" aria-controls="site-nav"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main">
+
+<article class="post">
+  <header class="post-head wrap" style="--chip-hue:22">
+    <a class="back-link" href="/posts/">← 全部文章</a>
+    <div class="post-meta-row">
+      <a class="chip" href="/categories/interview/" style="--chip-hue:22">笔面试</a>
+      <time datetime="2024-11-02">2024 年 11 月 2 日</time>
+      <span class="dot">·</span><span class="muted">3 分钟阅读</span>
+    </div>
+    <h1>Rust 笔面试笔记</h1>
+    <p class="post-sub">所有权、Drop、Copy/Move、Sized/Send/Sync、闭包、泛型与并发</p>
+  </header>
+  <div class="wrap post-layout">
+    <div class="prose"><h2 id="0-所有权机制和借用">0. 所有权机制和借用</h2>
+<p>所有权机制
+    一个值只能由一个变量作为所有者
+    离开作用域即生命周期就会释放
+    同一时间只能有一个所有者（单一所有权）
+借用
+    只能同时拥有一个可变引用和多个不可变引用</p>
+<h2 id="1-关于drop">1. 关于Drop</h2>
+<p>析构
+实现:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">fn</span><span class="w"> </span><span class="nf">drop</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_x</span><span class="p">:</span><span class="w"> </span><span class="nc">T</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+</code></pre></div>
+
+<p>_x会在返回前自动丢弃,
+编译器不允许显性调用drop，但可以通过Trait mem::drop的方式调用
+结构体中优先丢弃_x再依次丢弃_x.one 、 _x.two ...
+但局部变量会以相反的顺序丢弃</p>
+<p>Drop和Copy是排他的</p>
+<h2 id="2-copy-和-move">2. Copy 和 Move</h2>
+<p>let a:T = b;</p>
+<p>只有T: Clone + Copy 才会 Copy</p>
+<p>T: Clone + !Copy 以及 T: !Clone 为Move</p>
+<h2 id="3-hashmap-和-btreemap">3. HashMap 和 BTreeMap</h2>
+<p>B-Tree: 自平衡的数，数据有序</p>
+<p>HashMap是基于哈希表
+BTreeMap是基于BTree
+BTree是动态分配的，所以不需要指定</p>
+<h2 id="4-hashmap和hashset">4. HashMap和HashSet</h2>
+<p>hash set，实现为 HashMap，其中值为 ()。</p>
+<p>HashSet只有键没有值，是键的集合(无重复)</p>
+<h2 id="5-sized-send-sync-unpin">5. Sized/Send/Sync/Unpin</h2>
+<p>Sized： 编译时大小已知，编译器会自动为T实现Sized Trait</p>
+<p>Send 、 Sync：并发安全
+- unsafe auto trait
+- Send： T跨线程移动,独占访问是线程安全的
+- Sync：&amp;T线程共享,只读共享是安全的
+- 不支持的数据结构： <em>const T/</em>mut T 、UnsafeCell 、Rc 
+tips
+Arc、Rc
+区别在于Arc使用原子操作访问，而Rc是内存操作访问
+Arc支持多线程，而Rc是单线程</p>
+<h2 id="6-deref-derefmut">6. Deref/DerefMut</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">pub</span><span class="w"> </span><span class="k">trait</span><span class="w"> </span><span class="n">Deref</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 解引用出来的结果类型</span>
+<span class="w">    </span><span class="k">type</span><span class="w"> </span><span class="nc">Target</span><span class="p">:</span><span class="w"> </span><span class="o">?</span><span class="nb">Sized</span><span class="p">;</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">deref</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kp">&amp;</span><span class="nc">Self</span><span class="p">::</span><span class="n">Target</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">pub</span><span class="w"> </span><span class="k">trait</span><span class="w"> </span><span class="n">DerefMut</span><span class="p">:</span><span class="w"> </span><span class="nc">Deref</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">deref_mut</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="bp">Self</span><span class="p">::</span><span class="n">Target</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="7-debug-display">7. Debug、Display</h2>
+<p>Debug可以派生宏实现通过"{:?}"打印</p>
+<p>Display必须手动实现通过"{}"打印</p>
+<h2 id="8-切片-slice">8. 切片 slice</h2>
+<p>切片是描述一组属于同一类型、长度不确定的、在内存中连续存放的数据结构，动态增长</p>
+<p>可以查看某集合的一部分数据</p>
+<h2 id="9-迭代器">9. 迭代器</h2>
+<p>使用iter等进行调用，使用map、flier等进行处理</p>
+<p>只有最后进行next操作才会真正执行    比如collect()</p>
+<h2 id="10-自定义hash-key">10. 自定义Hash Key</h2>
+<p>实现Hash、PartialEq、Eq</p>
+<h2 id="11-error-trait">11. Error Trait</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">pub</span><span class="w"> </span><span class="k">trait</span><span class="w"> </span><span class="n">Error</span><span class="p">:</span><span class="w"> </span><span class="nc">Debug</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Display</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="sd">/// 此错误的下级来源 (如果有)</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">source</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nb">Option</span><span class="o">&lt;&amp;</span><span class="p">(</span><span class="k">dyn</span><span class="w"> </span><span class="n">Error</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">'</span><span class="nb">static</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="o">..</span><span class="p">.</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="sd">/// 返回一个描述错误的字符串</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">description</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="kp">&amp;</span><span class="kt">str</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="o">..</span><span class="p">.</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="sd">/// 指向当前错误造成的原因 这个方法应该返回那个导致当前错误的错误对象。</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">cause</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">-&gt;</span><span class="w"> </span><span class="nb">Option</span><span class="o">&lt;&amp;</span><span class="k">dyn</span><span class="w"> </span><span class="n">Error</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="o">..</span><span class="p">.</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">fn</span><span class="w"> </span><span class="nf">provide</span><span class="o">&lt;'</span><span class="na">a</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;'</span><span class="na">a</span><span class="w"> </span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">demand</span><span class="p">:</span><span class="w"> </span><span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="n">Demand</span><span class="o">&lt;'</span><span class="na">a</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="o">..</span><span class="p">.</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>From GPT
+- source(&amp;self) -&gt; Option&lt;&amp;(dyn Error + 'static)&gt; 方法用来返回此错误的下级来源（如果有的话），返回类型是一个包含 Error trait 的引用的 Option。</p>
+<ul>
+<li>
+<p>description(&amp;self) -&gt; &amp;str 方法返回一个描述错误的字符串。</p>
+</li>
+<li>
+<p>cause(&amp;self) -&gt; Option&lt;&amp;dyn Error&gt; 这是旧版本的方法，现在一般不建议使用。</p>
+</li>
+<li>
+<p>provide&lt;'a&gt;(&amp;'a self, demand: &amp;mut Demand&lt;'a&gt;) 方法接受一个 demand 参数，并且返回一个生命周期绑定到 self 的一个引用。</p>
+</li>
+</ul>
+<h2 id="12-闭包">12. 闭包</h2>
+<p>如果闭包不使用move语义则借用上下文变量</p>
+<p>闭包约束为Send + ‘static的原因</p>
+<p>Send 为了线程安全，可以跨线程使用
+'static 确保不会发送悬垂引用以及生命周期问题</p>
+<p>FnOnce
+只能调用一次
+涉及到捕获并move时会被判断为FnOnce
+例如</p>
+<div class="codehilite"><pre><span></span><code><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">move</span><span class="w"> </span><span class="o">|</span><span class="n">greeting</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">greeting</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">);</span><span class="w"> </span><span class="c1">// FnOnce </span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">move</span><span class="w"> </span><span class="o">|</span><span class="n">greeting</span><span class="p">:</span><span class="w"> </span><span class="nb">String</span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">greeting</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">.</span><span class="n">clone</span><span class="p">());</span><span class="w"> </span><span class="c1">// 非FnOnce</span>
+</code></pre></div>
+
+<p>因为 Fn 继承 FnMut ， 而 FnMut 继承了 FnOnce FnOnce是Fn FnMut 的super trait</p>
+<p>所以当Fn 或者 FnMut 当作 impl FnOnce 传入时，会被转换为FnOnce，因而只能调用一次</p>
+<p>Fn 不同于 FnMut</p>
+<p>Fn传入的是&amp;self 
+FnMut为&amp;mut self 代表捕获的参数可被改变即mut</p>
+<h2 id="13-泛型">13. 泛型</h2>
+<p>对于结构</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">id</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">{</span>
+<span class="w">    </span><span class="n">value</span><span class="p">:</span><span class="w"> </span><span class="kt">i32</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">User</span><span class="p">{</span>
+<span class="w">    </span><span class="n">id</span><span class="p">:</span><span class="w"> </span><span class="nc">id</span><span class="o">&lt;</span><span class="bp">Self</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Pro</span><span class="p">{</span>
+<span class="w">    </span><span class="n">id</span><span class="p">:</span><span class="w"> </span><span class="nc">id</span><span class="o">&lt;</span><span class="bp">Self</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>会编译不通过</p>
+<p>因为Struct id并没有使用T而编译器不容许这样的当前未使用在未来可能使用的情况</p>
+<p>改为以下就能通过编译</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">id</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">{</span>
+<span class="w">    </span><span class="n">value</span><span class="p">:</span><span class="w"> </span><span class="kt">i32</span><span class="p">,</span>
+<span class="w">    </span><span class="n">_tag</span><span class="p">:</span><span class="w"> </span><span class="nc">PhantomData</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>PhantomData幽灵数据，编译器不会实际产生参数，而是用于编译检查提示编译器T会用到</p>
+<h2 id="14-并发">14. 并发</h2>
+<p>无畏并发</p>
+<p>避免 
+1. while 取锁
+2. 修改左值加锁</p>
+<p>在次期间产生的问题,引入原子操作CAS(比较与修改操作, 指令读取某个内存地址，判断其值是否等于某个前置值，如果相等，将其修改为新的值)</p>
+<div class="codehilite"><pre><span></span><code><span class="k">while</span><span class="w"> </span><span class="bp">self</span>
+<span class="w">    </span><span class="p">.</span><span class="n">locked</span>
+<span class="w">    </span><span class="c1">// compare_exchange Rust 提供的 CAS 操作</span>
+<span class="w">    </span><span class="c1">//                             保证读操作对应读false  保证写操作对应赋值为true</span>
+<span class="w">    </span><span class="p">.</span><span class="n">compare_exchange</span><span class="p">(</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">Ordering</span><span class="p">::</span><span class="n">Acquire</span><span class="p">,</span><span class="w"> </span><span class="n">Ordering</span><span class="p">::</span><span class="n">Relaxed</span><span class="p">)</span><span class="c1">// 比较是否为false即能够取锁，是则加锁（true）并向下执行反之继续循环</span>
+<span class="w">    </span><span class="p">.</span><span class="n">is_err</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+
+
+<span class="c1">//需要的操作执行完后解锁同理</span>
+<span class="bp">self</span><span class="p">.</span><span class="n">locked</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="n">Ordering</span><span class="p">::</span><span class="n">Release</span><span class="p">);</span>
+</code></pre></div>
+
+<p>优化</p>
+<div class="codehilite"><pre><span></span><code><span class="k">while</span><span class="w"> </span><span class="bp">self</span>
+<span class="w">    </span><span class="p">.</span><span class="n">locked</span>
+<span class="w">    </span><span class="p">.</span><span class="n">compare_exchange</span><span class="p">(</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">Ordering</span><span class="p">::</span><span class="n">Acquire</span><span class="p">,</span><span class="w"> </span><span class="n">Ordering</span><span class="p">::</span><span class="n">Relaxed</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">is_err</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="c1">// 性能优化：compare_exchange 需要独占访问，当拿不到锁时，我们</span>
+<span class="w">    </span><span class="c1">// 先不停检测 locked 的状态，直到其 unlocked 后，再尝试拿锁</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">locked</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">Ordering</span><span class="p">::</span><span class="n">Relaxed</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">{}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="15-condvar-与-mutex">15. Condvar 与 Mutex</h2>
+<p>Mutex 用于保证条件在读写时互斥，Condvar 用于控制线程的等待和唤醒</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="n">pair</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Arc</span><span class="p">::</span><span class="n">new</span><span class="p">((</span><span class="n">Mutex</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="kc">false</span><span class="p">),</span><span class="w"> </span><span class="n">Condvar</span><span class="p">::</span><span class="n">new</span><span class="p">()));</span>
+<span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="n">cvar</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;*</span><span class="n">pair</span><span class="p">;</span>
+</code></pre></div>
+
+<p>主线程</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">started</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lock</span><span class="p">.</span><span class="n">lock</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span>
+<span class="n">cvar</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">started</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span><span class="w"> </span><span class="c1">// 堵塞等待started改变并返回改变的值</span>
+</code></pre></div>
+
+<h2 id="16-异步">16. 异步</h2>
+<p>无畏并发</p>
+<p>Future 的调度是协作式多任务 协程</p>
+<p>tokio::async 会运行Future await会等待Future执行完毕</p>
+<p>tips:
+Framed::new(stream, LinesCodec::new());</p>
+<p>tokio_util::codec::Framed的解码器，将编码以某种方式解码以进行I/O操作</p>
+<h2 id="17-通道-channel">17. 通道 channel</h2>
+<div class="codehilite"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="n">tx</span><span class="p">,</span><span class="w"> </span><span class="n">rx</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">channel</span><span class="p">::</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="kd">let</span><span class="w"> </span><span class="n">tx1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tx</span><span class="p">.</span><span class="n">clone</span><span class="p">();</span>
+<span class="n">thread</span><span class="p">::</span><span class="n">spaw</span><span class="p">(</span><span class="k">move</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">tx</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span>
+<span class="w"> </span><span class="p">});</span>
+<span class="n">thread</span><span class="p">::</span><span class="n">spawn</span><span class="p">(</span><span class="k">move</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">tx1</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span>
+<span class="p">});</span>
+<span class="n">rx</span><span class="p">.</span><span class="n">recv</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span><span class="w">    </span>
+</code></pre></div></div>
+    
+  <aside class="post-toc" aria-label="目录">
+    <p class="toc-title">目录</p>
+    <ul>
+<li><a href="#0-所有权机制和借用">0. 所有权机制和借用</a></li>
+<li><a href="#1-关于drop">1. 关于Drop</a></li>
+<li><a href="#2-copy-和-move">2. Copy 和 Move</a></li>
+<li><a href="#3-hashmap-和-btreemap">3. HashMap 和 BTreeMap</a></li>
+<li><a href="#4-hashmap和hashset">4. HashMap和HashSet</a></li>
+<li><a href="#5-sized-send-sync-unpin">5. Sized/Send/Sync/Unpin</a></li>
+<li><a href="#6-deref-derefmut">6. Deref/DerefMut</a></li>
+<li><a href="#7-debug-display">7. Debug、Display</a></li>
+<li><a href="#8-切片-slice">8. 切片 slice</a></li>
+<li><a href="#9-迭代器">9. 迭代器</a></li>
+<li><a href="#10-自定义hash-key">10. 自定义Hash Key</a></li>
+<li><a href="#11-error-trait">11. Error Trait</a></li>
+<li><a href="#12-闭包">12. 闭包</a></li>
+<li><a href="#13-泛型">13. 泛型</a></li>
+<li><a href="#14-并发">14. 并发</a></li>
+<li><a href="#15-condvar-与-mutex">15. Condvar 与 Mutex</a></li>
+<li><a href="#16-异步">16. 异步</a></li>
+<li><a href="#17-通道-channel">17. 通道 channel</a></li>
+</ul>
+  </aside>
+  </div>
+  <footer class="wrap post-foot">
+    <div class="tag-row"><a class="tag" href="/tags/#tag-Rust">#Rust</a><a class="tag" href="/tags/#tag-笔记">#笔记</a><a class="tag" href="/tags/#tag-笔面试题">#笔面试题</a></div>
+    <div class="post-nav"><a class="post-nav-item prev" href="/posts/written-test-mixed/"><span class="k">← 上一篇</span><strong>笔试题记录 · 综合</strong></a><a class="post-nav-item next" href="/posts/interview-rtos/"><span class="k">下一篇 →</span><strong>RTOS 笔面试笔记</strong></a></div>
+  </footer>
+</article>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-row">
+    <div class="foot-brand">
+      <span class="brand-mark small">孟</span>
+      <p>Menghan Studio · 记录学习与思考<br>
+      <span class="muted">本博客内容仅作学习交流</span></p>
+    </div>
+    <div class="foot-links">
+      <a href="/posts/">全部文章</a>
+      <a href="/categories/">分类</a>
+      <a href="/projects/">项目</a>
+      <a href="https://github.com/llllishuo" rel="noopener">GitHub</a>
+      <a href="mailto:1756524586@qq.com">邮箱</a>
+      <a href="/feed.xml">RSS</a>
+    </div>
+  </div>
+  <div class="wrap foot-base">
+    <span>© 2026 MenghanStudio</span>
+    <span>由 Python 生成的静态站点</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>

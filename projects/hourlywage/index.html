@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>时薪计算器 · Menghan Studio</title>
+<meta name="description" content="填 4 个数，中间那个大数字就是时薪——边填边算，没有按钮。Windows / 网页 / 终端三端同一套公式与进位规则，结果逐条比对一致。">
+<meta name="author" content="MenghanStudio">
+<meta name="keywords" content="嵌入式, Rust, RTOS, C++, 操作系统, 读书笔记, 马列毛, 个人博客, MenghanStudio">
+<link rel="canonical" href="https://llllishuo.github.io/projects/hourlywage/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Menghan Studio">
+<meta property="og:title" content="时薪计算器 · Menghan Studio">
+<meta property="og:description" content="填 4 个数，中间那个大数字就是时薪——边填边算，没有按钮。Windows / 网页 / 终端三端同一套公式与进位规则，结果逐条比对一致。">
+<meta property="og:url" content="https://llllishuo.github.io/projects/hourlywage/">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#f6f3ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Menghan Studio" href="/feed.xml">
+<link rel="stylesheet" href="/assets/css/pygments.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<script>(function(){try{
+var p=new URLSearchParams(location.search).get('theme');
+if(p==='dark'||p==='light'){localStorage.setItem('ms-theme',p);}
+var t=(p==='dark'||p==='light')?p:localStorage.getItem('ms-theme');
+if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
+</head>
+<body class="has-project">
+<a class="skip-link" href="#main">跳到正文</a>
+
+<header class="site-head">
+  <div class="wrap head-row">
+    <a class="brand" href="/" aria-label="Menghan Studio 首页">
+      <span class="brand-mark">孟</span>
+      <span class="brand-text">
+        <strong>Menghan Studio</strong>
+        <em>代码 · 读书 · 折腾</em>
+      </span>
+    </a>
+    <nav class="nav" id="site-nav"><a href="/posts/">文章</a><a href="/categories/">分类</a><a href="/projects/" class="is-active">项目</a><a href="/about/">关于</a></nav>
+    <div class="head-actions">
+      <button class="icon-btn" id="theme-toggle" type="button"
+              aria-label="切换深色/浅色模式" title="切换深色/浅色模式">
+        <span class="ico-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg></span><span class="ico-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z"/></svg></span>
+      </button>
+      <button class="icon-btn menu-btn" id="menu-toggle" type="button"
+              aria-label="展开导航" aria-expanded="false" aria-controls="site-nav"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main">
+
+<article class="project">
+  <header class="project-head wrap" style="--card-accent:#2b6f9e">
+    <a class="back-link" href="/projects/">← 全部项目</a>
+    <div class="badge-row"><span class="badge">Windows</span><span class="badge">网页</span><span class="badge">Linux / macOS</span><span class="badge">单文件零依赖</span></div>
+    <h1>时薪计算器</h1>
+    <p class="project-tagline">把月薪拆成每一小时的价钱。</p>
+    <div class="hero-actions"><a class="btn btn-primary" href="/demo/hourlywage/">网页版<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a><a class="btn btn-ghost" href="/assets/files/hourlywage.exe">下载 Windows 版（.exe）<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a><a class="btn btn-ghost" href="https://github.com/llllishuo/HourlyWage" target="_blank" rel="noopener">源码仓库<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a><a class="btn btn-ghost" href="https://llllishuo.github.io/HourlyWage/" target="_blank" rel="noopener">GitHub Pages 版<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a></div>
+    <dl class="project-meta"><div><dt>三端</dt><dd>exe / index.html / .sh</dd></div><div><dt>口径</dt><dd>21.75 天/月</dd></div><div><dt>依赖</dt><dd>无（终端版只要 sh + awk）</dd></div><div><dt>许可</dt><dd>见仓库</dd></div></dl>
+  </header>
+  <div class="wrap project-layout">
+    <div class="prose"><h2 id="在线试一下">在线试一下</h2>
+<p>下面就是网页版本体（单文件 HTML，直接嵌进来）：</p>
+<div class="demo-frame">
+  <div class="demo-bar">
+    <span class="demo-dots"><i></i><i></i><i></i></span>
+    <span>在线演示 · 网页版</span>
+    <a href="/demo/hourlywage/" target="_blank" rel="noopener">全屏打开 ↗</a>
+  </div>
+  <iframe src="/demo/hourlywage/" title="时薪计算器在线演示" loading="lazy"></iframe>
+</div>
+
+<p class="demo-note">改任意一个数字，时薪立刻跟着变。留空按 0 计算；总工时算出 0 或者填了负数时，会直接把原因写在数字的位置上。</p>
+
+<h2 id="三个端-一套算法">三个端，一套算法</h2>
+<table>
+<thead>
+<tr>
+<th>端</th>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows</td>
+<td><code>时薪计算器.exe</code></td>
+<td>单文件，双击即用，不用装 .NET 运行时</td>
+</tr>
+<tr>
+<td>网页</td>
+<td><code>index.html</code></td>
+<td>单文件，有浏览器就能用（Windows / Linux / macOS / 手机）</td>
+</tr>
+<tr>
+<td>Linux / macOS</td>
+<td><code>hourlywage.sh</code></td>
+<td>终端版，只依赖 <code>sh</code> + <code>awk</code></td>
+</tr>
+</tbody>
+</table>
+<p>三端各自实现同一套公式与进位规则，再由 <code>test/consistency.sh</code> 把同一组输入分别交给 awk、JS、C# 计算，逐条比对输出。</p>
+<h2 id="计算口径">计算口径</h2>
+<div class="codehilite"><pre><span></span><code>时薪 =（月薪 + 奖金）÷（每日工时 × 21.75 + 节假日总工时）
+
+月计薪天数 =（365 − 104）÷ 12 = 21.75 天/月
+</code></pre></div>
+
+<p>21.75 是年均值：一年 365 天，扣掉 52 周 × 2 天周末共 104 天，剩 261 天计薪，平均到每月就是 21.75 天。</p>
+<p>所以「每日工时 × 21.75」得到的是一个月的常规工时，「节假日总工时」再单独加上去，最后用月薪加奖金去除。</p>
+<p>结果<strong>四舍五入到分，半分向上进位</strong>，三端同一规则；实现里都先乘 100 取整再除回去，避免浮点数格式化带来的偏差。</p>
+<div class="feature-grid">
+  <div class="feature">
+    <h4>边填边算，没有按钮</h4>
+    <p>输入框一变就重算，中间那个大数字直接给出结果，不需要点「计算」。</p>
+  </div>
+  <div class="feature">
+    <h4>错就说清楚</h4>
+    <p>输入非法、总工时为 0、填了负数，都会在结果位置显示具体原因，而不是给你一个空值。</p>
+  </div>
+  <div class="feature">
+    <h4>三端逐条比对</h4>
+    <p>一致性脚本覆盖常规用例和半分进位边界（45.125 → 45.13），三端结果必须完全相同。</p>
+  </div>
+  <div class="feature">
+    <h4>零依赖单文件</h4>
+    <p>网页版和终端版都不需要构建，拷走一个文件就能跑；exe 用 csc 直接编译出来。</p>
+  </div>
+</div>
+
+<h2 id="终端版用法">终端版用法</h2>
+<div class="codehilite"><pre><span></span><code>chmod<span class="w"> </span>+x<span class="w"> </span>hourlywage.sh<span class="w">          </span><span class="c1"># 第一次</span>
+./hourlywage.sh<span class="w"> </span><span class="m">8000</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w">      </span><span class="c1"># 月薪 每日工时 节假日总工时 奖金 → 45.98</span>
+./hourlywage.sh<span class="w">                 </span><span class="c1"># 不带参数则交互输入，直接回车取默认值</span>
+./hourlywage.sh<span class="w"> </span>-h<span class="w">              </span><span class="c1"># 帮助</span>
+</code></pre></div>
+
+<p>只输出数字，方便接管道：</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">rate</span><span class="o">=</span><span class="k">$(</span>./hourlywage.sh<span class="w"> </span><span class="m">8000</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"时薪 </span><span class="nv">$rate</span><span class="s2"> 元/小时"</span>
+</code></pre></div>
+
+<p>参数非法时打印原因并以退出码 2 结束。</p>
+<h2 id="三端一致性测试">三端一致性测试</h2>
+<div class="codehilite"><pre><span></span><code>sh<span class="w"> </span>test/consistency.sh
+</code></pre></div>
+
+<p>同一组输入分别交给 awk / JS / C# 计算并逐条比对。JS 需要 <code>node</code>；C# 需要先编译出 <code>wage-test.exe</code>，没有会自动跳过。</p>
+<h2 id="从源码构建-windows">从源码构建（Windows）</h2>
+<div class="codehilite"><pre><span></span><code>build.cmd
+</code></pre></div>
+
+<p>或手动：</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">%WINDIR%</span>\Microsoft.NET\Framework64\v4.0.30319\csc.exe /target:winexe /codepage:65001 /optimize+ <span class="se">^</span>
+<span class="se"> </span> /out:<span class="s2">"时薪计算器.exe"</span> /r:System.Windows.Forms.dll /r:System.Drawing.dll <span class="se">^</span>
+<span class="se"> </span> src\Wage.cs src\Program.cs
+</code></pre></div>
+
+<p><code>/codepage:65001</code> 不能省，否则 UTF-8 源码里的中文会被按本地代码页误读。</p>
+<h2 id="目录">目录</h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/Wage.cs</code></td>
+<td>计算内核：公式、月计薪天数、校验、进位</td>
+</tr>
+<tr>
+<td><code>src/Program.cs</code></td>
+<td>Windows 界面（WinForms）</td>
+</tr>
+<tr>
+<td><code>src/TestMain.cs</code></td>
+<td>控制台自检，输出一致性测试用的 <code>VALUE</code> 行</td>
+</tr>
+<tr>
+<td><code>index.html</code></td>
+<td>网页版（跨平台，单文件）</td>
+</tr>
+<tr>
+<td><code>hourlywage.sh</code></td>
+<td>终端版（Linux / macOS，零依赖）</td>
+</tr>
+<tr>
+<td><code>test/consistency.sh</code></td>
+<td>三端一致性检查</td>
+</tr>
+</tbody>
+</table>
+<p>月计薪天数写在三个地方，改口径要一起改：<code>src/Wage.cs</code> 的 <code>PaidDaysPerYear</code> / <code>PayDaysPerMonth</code>、<code>index.html</code> 的 <code>wage-logic</code> 段、<code>hourlywage.sh</code> 的 <code>PAY_DAYS_PER_MONTH</code>。改完跑一遍 <code>sh test/consistency.sh</code>。</p>
+<h2 id="下载">下载</h2>
+<ul>
+<li><a href="/assets/files/hourlywage.exe">Windows 版 <code>hourlywage.exe</code></a>（本站直链，与原仓库同名产物一致）</li>
+<li><a href="/demo/hourlywage/">在线网页版</a></li>
+<li><a href="https://github.com/llllishuo/HourlyWage">仓库源码</a></li>
+</ul></div>
+    
+  <aside class="post-toc" aria-label="目录">
+    <p class="toc-title">本页内容</p>
+    <ul>
+<li><a href="#在线试一下">在线试一下</a></li>
+<li><a href="#三个端-一套算法">三个端，一套算法</a></li>
+<li><a href="#计算口径">计算口径</a></li>
+<li><a href="#终端版用法">终端版用法</a></li>
+<li><a href="#三端一致性测试">三端一致性测试</a></li>
+<li><a href="#从源码构建-windows">从源码构建（Windows）</a></li>
+<li><a href="#目录">目录</a></li>
+<li><a href="#下载">下载</a></li>
+</ul>
+  </aside>
+  </div>
+</article>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-row">
+    <div class="foot-brand">
+      <span class="brand-mark small">孟</span>
+      <p>Menghan Studio · 记录学习与思考<br>
+      <span class="muted">本博客内容仅作学习交流</span></p>
+    </div>
+    <div class="foot-links">
+      <a href="/posts/">全部文章</a>
+      <a href="/categories/">分类</a>
+      <a href="/projects/">项目</a>
+      <a href="https://github.com/llllishuo" rel="noopener">GitHub</a>
+      <a href="mailto:1756524586@qq.com">邮箱</a>
+      <a href="/feed.xml">RSS</a>
+    </div>
+  </div>
+  <div class="wrap foot-base">
+    <span>© 2026 MenghanStudio</span>
+    <span>由 Python 生成的静态站点</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>

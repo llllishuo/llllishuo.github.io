@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>时薪计算器</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    display: flex; align-items: center; justify-content: center;
+    background: #fff; color: #1f2328;
+    font-family: "Microsoft YaHei UI", "PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC", system-ui, sans-serif;
+  }
+  .card { width: 360px; padding: 16px; }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+  .row label { font-size: 15px; white-space: nowrap; }
+  .row input {
+    width: 150px; padding: 6px 10px; font-size: 15px; text-align: right; color: inherit;
+    border: 1px solid #d6d9de; border-radius: 6px; outline: none; background: #fff;
+    font-variant-numeric: tabular-nums;
+  }
+  .row input:focus { border-color: #1874c0; box-shadow: 0 0 0 3px rgba(24, 116, 192, .12); }
+  hr { border: 0; border-top: 1px solid #e9ebee; margin: 18px 0 12px; }
+  .caption { text-align: center; font-size: 12px; color: #8a8e94; }
+  .value {
+    margin: 2px 0 4px; text-align: center; line-height: 1.2;
+    font-size: 54px; font-weight: 700; color: #185aa0; font-variant-numeric: tabular-nums;
+  }
+  .value.tip { font-size: 20px; color: #c43c3c; }
+  .note { margin-top: 10px; text-align: center; font-size: 11px; color: #9aa0a6; line-height: 1.7; }
+</style>
+</head>
+<body>
+<main class="card">
+  <div class="row"><label for="salary">月薪（元）</label><input id="salary" inputmode="decimal" value="8000"></div>
+  <div class="row"><label for="hours">每日工时（小时）</label><input id="hours" inputmode="decimal" value="8"></div>
+  <div class="row"><label for="holiday">节假日总工时（小时）</label><input id="holiday" inputmode="decimal" value="0"></div>
+  <div class="row"><label for="bonus">奖金（元）</label><input id="bonus" inputmode="decimal" value="0"></div>
+  <hr>
+  <div class="caption">时薪（元/小时）</div>
+  <div class="value" id="value">45.98</div>
+  <div class="note">月计薪天数按年均 21.75 天<br>时薪 =（月薪 + 奖金）÷ 总工时</div>
+</main>
+
+<script id="wage-logic">
+// 与 Windows 版 src/Wage.cs 同一套公式、同一套进位规则（四舍五入到分）
+const PAID_DAYS_PER_YEAR = 365 - 104;               // 扣掉 52 周 × 2 天周末
+const PAY_DAYS_PER_MONTH = PAID_DAYS_PER_YEAR / 12;  // 21.75 天/月
+
+function computeWage(salary, hoursPerDay, holidayHours, bonus) {
+  const values = [salary, hoursPerDay, holidayHours, bonus];
+  if (values.some(v => typeof v !== 'number' || !isFinite(v) || v < 0)) {
+    return { ok: false, error: '请输入不小于 0 的数字' };
+  }
+  const totalHours = hoursPerDay * PAY_DAYS_PER_MONTH + holidayHours;
+  if (totalHours <= 0) {
+    return { ok: false, error: '总工时不能为 0' };
+  }
+  const raw = (salary + bonus) / totalHours;
+  const cents = Math.round(raw * 100);   // 整数运算避免浮点格式化误差
+  return { ok: true, value: cents / 100, text: (cents / 100).toFixed(2) };
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { computeWage, PAY_DAYS_PER_MONTH };
+}
+</script>
+
+<script>
+(function () {
+  var ids = ['salary', 'hours', 'holiday', 'bonus'];
+  var out = document.getElementById('value');
+
+  function readNumber(id) {
+    var raw = document.getElementById(id).value.trim().replace(/[，,]/g, '').replace(/[．。]/g, '.');
+    if (raw === '') { return 0; }
+    var value = Number(raw);
+    return isFinite(value) ? value : NaN;
+  }
+
+  function render() {
+    var args = ids.map(readNumber);
+    if (args.some(function (n) { return isNaN(n); })) {
+      out.className = 'value tip';
+      out.textContent = '请填数字';
+      return;
+    }
+    var result = computeWage(args[0], args[1], args[2], args[3]);
+    if (!result.ok) {
+      out.className = 'value tip';
+      out.textContent = result.error;
+      return;
+    }
+    out.className = 'value';
+    out.textContent = result.text;
+  }
+
+  ids.forEach(function (id) { document.getElementById(id).addEventListener('input', render); });
+  render();
+}());
+</script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>项目 · Menghan Studio</title>
+<meta name="description" content="MenghanStudio 的开源项目与应用。">
+<meta name="author" content="MenghanStudio">
+<meta name="keywords" content="嵌入式, Rust, RTOS, C++, 操作系统, 读书笔记, 马列毛, 个人博客, MenghanStudio">
+<link rel="canonical" href="https://llllishuo.github.io/projects/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Menghan Studio">
+<meta property="og:title" content="项目 · Menghan Studio">
+<meta property="og:description" content="MenghanStudio 的开源项目与应用。">
+<meta property="og:url" content="https://llllishuo.github.io/projects/">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#f6f3ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Menghan Studio" href="/feed.xml">
+<link rel="stylesheet" href="/assets/css/pygments.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<script>(function(){try{
+var p=new URLSearchParams(location.search).get('theme');
+if(p==='dark'||p==='light'){localStorage.setItem('ms-theme',p);}
+var t=(p==='dark'||p==='light')?p:localStorage.getItem('ms-theme');
+if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
+</head>
+<body class="">
+<a class="skip-link" href="#main">跳到正文</a>
+
+<header class="site-head">
+  <div class="wrap head-row">
+    <a class="brand" href="/" aria-label="Menghan Studio 首页">
+      <span class="brand-mark">孟</span>
+      <span class="brand-text">
+        <strong>Menghan Studio</strong>
+        <em>代码 · 读书 · 折腾</em>
+      </span>
+    </a>
+    <nav class="nav" id="site-nav"><a href="/posts/">文章</a><a href="/categories/">分类</a><a href="/projects/" class="is-active">项目</a><a href="/about/">关于</a></nav>
+    <div class="head-actions">
+      <button class="icon-btn" id="theme-toggle" type="button"
+              aria-label="切换深色/浅色模式" title="切换深色/浅色模式">
+        <span class="ico-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg></span><span class="ico-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z"/></svg></span>
+      </button>
+      <button class="icon-btn menu-btn" id="menu-toggle" type="button"
+              aria-label="展开导航" aria-expanded="false" aria-controls="site-nav"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main">
+
+<section class="page-head wrap">
+  <p class="kicker">项目</p>
+  <h1>自己做的工具</h1>
+  <p class="page-lead">都是能直接拿来用的东西：一个 Android 黑名单清理器，一个三端一致的时薪计算器。</p>
+</section>
+<section class="wrap">
+  <div class="project-grid wide">
+<a class="project-card" href="/projects/fuckoff/" style="--card-accent:#3f8f74">
+  <div class="card-visual">
+    <div class="card-glow"></div>
+    <img class="card-shot" src="/assets/img/projects/fuckoff/card.jpg" alt="FuckOff 界面预览" loading="lazy">
+  </div>
+  <div class="card-body">
+    <div class="badge-row"><span class="badge">Android</span><span class="badge">Java</span><span class="badge">Apache-2.0</span><span class="badge">零网络权限</span></div>
+    <h3>FuckOff</h3>
+    <p>你把自己选中的应用加入黑名单，之后只要它们出现在手机上，就自动卸载或提醒你确认。纯本地运行，没有申请网络权限。</p>
+    <span class="card-more">查看介绍与演示 <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+  </div>
+</a>
+<a class="project-card" href="/projects/hourlywage/" style="--card-accent:#2b6f9e">
+  <div class="card-visual">
+    <div class="card-glow"></div>
+    <img class="card-shot" src="/assets/img/projects/hourlywage/card.jpg" alt="时薪计算器 界面预览" loading="lazy">
+  </div>
+  <div class="card-body">
+    <div class="badge-row"><span class="badge">Windows</span><span class="badge">网页</span><span class="badge">Linux / macOS</span><span class="badge">单文件零依赖</span></div>
+    <h3>时薪计算器</h3>
+    <p>填 4 个数，中间那个大数字就是时薪——边填边算，没有按钮。Windows / 网页 / 终端三端同一套公式与进位规则，结果逐条比对一致。</p>
+    <span class="card-more">查看介绍与演示 <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+  </div>
+</a></div>
+</section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-row">
+    <div class="foot-brand">
+      <span class="brand-mark small">孟</span>
+      <p>Menghan Studio · 记录学习与思考<br>
+      <span class="muted">本博客内容仅作学习交流</span></p>
+    </div>
+    <div class="foot-links">
+      <a href="/posts/">全部文章</a>
+      <a href="/categories/">分类</a>
+      <a href="/projects/">项目</a>
+      <a href="https://github.com/llllishuo" rel="noopener">GitHub</a>
+      <a href="mailto:1756524586@qq.com">邮箱</a>
+      <a href="/feed.xml">RSS</a>
+    </div>
+  </div>
+  <div class="wrap foot-base">
+    <span>© 2026 MenghanStudio</span>
+    <span>由 Python 生成的静态站点</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>

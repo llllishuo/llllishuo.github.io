@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>关于 · Menghan Studio</title>
+<meta name="description" content="嵌入式 / 系统方向，写代码，也读书。">
+<meta name="author" content="MenghanStudio">
+<meta name="keywords" content="嵌入式, Rust, RTOS, C++, 操作系统, 读书笔记, 马列毛, 个人博客, MenghanStudio">
+<link rel="canonical" href="https://llllishuo.github.io/about/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Menghan Studio">
+<meta property="og:title" content="关于 · Menghan Studio">
+<meta property="og:description" content="嵌入式 / 系统方向，写代码，也读书。">
+<meta property="og:url" content="https://llllishuo.github.io/about/">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#f6f3ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Menghan Studio" href="/feed.xml">
+<link rel="stylesheet" href="/assets/css/pygments.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<script>(function(){try{
+var p=new URLSearchParams(location.search).get('theme');
+if(p==='dark'||p==='light'){localStorage.setItem('ms-theme',p);}
+var t=(p==='dark'||p==='light')?p:localStorage.getItem('ms-theme');
+if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
+</head>
+<body class="">
+<a class="skip-link" href="#main">跳到正文</a>
+
+<header class="site-head">
+  <div class="wrap head-row">
+    <a class="brand" href="/" aria-label="Menghan Studio 首页">
+      <span class="brand-mark">孟</span>
+      <span class="brand-text">
+        <strong>Menghan Studio</strong>
+        <em>代码 · 读书 · 折腾</em>
+      </span>
+    </a>
+    <nav class="nav" id="site-nav"><a href="/posts/">文章</a><a href="/categories/">分类</a><a href="/projects/">项目</a><a href="/about/" class="is-active">关于</a></nav>
+    <div class="head-actions">
+      <button class="icon-btn" id="theme-toggle" type="button"
+              aria-label="切换深色/浅色模式" title="切换深色/浅色模式">
+        <span class="ico-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg></span><span class="ico-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z"/></svg></span>
+      </button>
+      <button class="icon-btn menu-btn" id="menu-toggle" type="button"
+              aria-label="展开导航" aria-expanded="false" aria-controls="site-nav"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main">
+
+<section class="page-head wrap">
+  <p class="kicker">关于</p>
+  <h1>关于</h1>
+  <p class="page-lead">嵌入式 / 系统方向，写代码，也读书。</p>
+  <div class="hero-actions"><a class="btn btn-ghost" href="https://github.com/llllishuo" target="_blank" rel="noopener">GitHub</a><a class="btn btn-ghost" href="/projects/fuckoff/">FuckOff</a><a class="btn btn-ghost" href="/projects/hourlywage/">时薪计算器</a><a class="btn btn-ghost" href="mailto:1756524586@qq.com">邮箱</a></div>
+</section>
+<section class="wrap">
+  <div class="prose about-prose"><p>我是 <strong>MenghanStudio</strong>，做嵌入式和系统方向的事情：写过 RTOS 上的驱动，也用 Rust 跟着教程从零写过一个操作系统内核，笔面试时把 C++ / Rust / RTOS 的知识点整理成了几份笔记。</p>
+<p>这个站点是那些东西的落脚处。</p>
+<h2 id="这里有什么">这里有什么</h2>
+<ul>
+<li><strong><a href="/categories/dev/">开发笔记</a></strong> —— 踩过的坑、想明白的原理。比如内核怎么访问页表这种一开始完全绕不过去的问题。</li>
+<li><strong><a href="/categories/interview/">笔面试</a></strong> —— C++ / Rust / RTOS 的题目和自己的答案，边准备边补。</li>
+<li><strong><a href="/categories/reading/">读书笔记</a></strong> —— 马列毛经典原著的摘录与批注。读原著比读二手解读慢，但能看清论证本身。</li>
+<li><strong><a href="/categories/special/">专题</a></strong> —— 长线整理的题目，一次串一条线索。</li>
+</ul>
+<h2 id="做过的东西">做过的东西</h2>
+<ul>
+<li><strong><a href="/projects/fuckoff/">FuckOff</a></strong> —— Android 黑名单应用清理器。把你主动拉黑的 App 请出手机，纯本地运行，没有网络权限。</li>
+<li><strong><a href="/projects/hourlywage/">时薪计算器</a></strong> —— 三端（Windows / 网页 / 终端）同一套公式和进位规则的时薪计算工具，结果逐条比对一致。</li>
+</ul>
+<h2 id="关于这个站">关于这个站</h2>
+<p>站点是静态页面：文章写在 <code>content/posts/</code> 里，用 Python 脚本（<a href="https://github.com/llllishuo/llllishuo.github.io/blob/main/build.py">build.py</a>）生成，托管在 GitHub Pages 上。没有前端框架，没有第三方 CDN，也不需要登录和追踪脚本。</p>
+<p>内容仅作学习交流。有疑问或者发现错误，欢迎通过邮件或者 GitHub Issue 告诉我。</p></div>
+</section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-row">
+    <div class="foot-brand">
+      <span class="brand-mark small">孟</span>
+      <p>Menghan Studio · 记录学习与思考<br>
+      <span class="muted">本博客内容仅作学习交流</span></p>
+    </div>
+    <div class="foot-links">
+      <a href="/posts/">全部文章</a>
+      <a href="/categories/">分类</a>
+      <a href="/projects/">项目</a>
+      <a href="https://github.com/llllishuo" rel="noopener">GitHub</a>
+      <a href="mailto:1756524586@qq.com">邮箱</a>
+      <a href="/feed.xml">RSS</a>
+    </div>
+  </div>
+  <div class="wrap foot-base">
+    <span>© 2026 MenghanStudio</span>
+    <span>由 Python 生成的静态站点</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>
