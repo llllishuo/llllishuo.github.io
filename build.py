@@ -38,6 +38,12 @@ from pygments.formatters import HtmlFormatter
 ROOT = os.path.dirname(os.path.abspath(__file__))
 CONTENT = os.path.join(ROOT, "content")
 
+# 站点地址与环境变量：
+#   SITE_URL  站点绝对地址，用于 canonical / og / feed / sitemap
+#   SITE_BASE 站点所在的路径前缀（部署在子目录时用，如 /menghan）
+SITE_URL = os.environ.get("SITE_URL", "https://llllishuo.github.io").rstrip("/")
+SITE_BASE = os.environ.get("SITE_BASE", "").rstrip("/")
+
 # --------------------------------------------------------------------------
 # 站点配置
 # --------------------------------------------------------------------------
@@ -47,7 +53,8 @@ SITE = {
     "short": "Menghan",
     "monogram": "孟",
     "tagline": "代码 · 读书 · 折腾",
-    "url": "https://llllishuo.github.io",
+    "url": SITE_URL,
+    "base": SITE_BASE,
     "description": "MenghanStudio 的个人主页：嵌入式与系统方向的开发笔记、笔面试整理、"
                    "马列毛经典读书笔记，以及自己动手做的小工具。",
     "author": "MenghanStudio",
@@ -287,6 +294,7 @@ def load_projects() -> list[dict]:
             "toc": toc,
             "url": f"/projects/{slug}/",
             "card": meta.get("card", ""),
+            "shape": meta.get("shape", "portrait"),
             "accent": meta.get("accent", ""),
         })
     projects.sort(key=lambda p: p["order"])
@@ -373,13 +381,20 @@ def footer() -> str:
 </footer>"""
 
 
+def apply_base(page: str) -> str:
+    """把站内绝对路径（/assets/... 、/posts/...）加上部署前缀。"""
+    if not SITE_BASE:
+        return page
+    return re.sub(r'((?:href|src|poster|action)=")/(?!/)', r"\1" + SITE_BASE + "/", page)
+
+
 def layout(*, title: str, body: str, description: str = "", active: str = "",
            url: str = "", page_type: str = "website", body_class: str = "",
            extra_head: str = "") -> str:
     full_title = title if title == SITE["name"] else f"{title} · {SITE['name']}"
     desc = description or SITE["description"]
     canonical = SITE["url"] + (url or "/")
-    return f"""<!DOCTYPE html>
+    return apply_base(f"""<!DOCTYPE html>
 <html lang="zh-CN" data-theme="light">
 <head>
 <meta charset="utf-8">
@@ -414,7 +429,7 @@ def layout(*, title: str, body: str, description: str = "", active: str = "",
 <script src="/assets/js/site.js" defer></script>
 </body>
 </html>
-"""
+""")
 
 
 def section_head(title: str, more_href: str = "", more_label: str = "查看全部") -> str:
@@ -430,20 +445,22 @@ def chip(cat: dict) -> str:
 
 def post_row(post: dict) -> str:
     tags = "".join(f'<span class="tag">#{esc(t)}</span>' for t in post["tags"][:4])
+    sub = (f'<p class="post-row-sub">{esc(post["subtitle"])}</p>'
+           if post['subtitle'] else '')
     return f"""
 <article class="post-row" data-cat="{esc(post['category']['slug'])}"
          data-search="{esc((post['title'] + ' ' + post['subtitle'] + ' ' + ' '.join(post['tags'])).lower())}">
-  <a class="post-row-main" href="{post['url']}">
-    <div class="post-row-meta">
-      {chip(post['category'])}
-      <time datetime="{esc(post['date'])}">{esc(fmt_date(post['date']))}</time>
-      <span class="dot">·</span><span class="muted">{post['minutes']} 分钟</span>
-    </div>
+  <div class="post-row-meta">
+    {chip(post['category'])}
+    <time datetime="{esc(post['date'])}">{esc(fmt_date(post['date']))}</time>
+    <span class="dot">·</span><span class="muted">{post['minutes']} 分钟</span>
+  </div>
+  <a class="post-row-link" href="{post['url']}">
     <h3>{esc(post['title'])}</h3>
-    {f'<p class="post-row-sub">{esc(post["subtitle"])}</p>' if post['subtitle'] else ''}
+    {sub}
     <p class="post-row-excerpt">{esc(post['excerpt'])}</p>
-    <div class="tag-row">{tags}</div>
   </a>
+  <div class="tag-row">{tags}</div>
 </article>"""
 
 
@@ -451,7 +468,8 @@ def project_card(p: dict) -> str:
     badges = "".join(f'<span class="badge">{esc(b)}</span>' for b in p["badges"][:4])
     accent = p.get("accent") or ""
     style = f' style="--card-accent:{esc(accent)}"' if accent else ""
-    shot = (f'<img class="card-shot" src="{esc(p["card"])}" alt="{esc(p["title"])} 界面预览" loading="lazy">'
+    shot_cls = "card-shot is-wide" if p.get("shape") == "landscape" else "card-shot"
+    shot = (f'<img class="{shot_cls}" src="{esc(p["card"])}" alt="{esc(p["title"])} 界面预览" loading="lazy">'
             if p.get("card") else "")
     return f"""
 <a class="project-card" href="{p['url']}"{style}>
@@ -650,7 +668,7 @@ def page_projects(projects: list[dict]) -> str:
 <section class="page-head wrap">
   <p class="kicker">项目</p>
   <h1>自己做的工具</h1>
-  <p class="page-lead">都是能直接拿来用的东西：一个 Android 黑名单清理器，一个三端一致的时薪计算器。</p>
+  <p class="page-lead">都是能直接拿来用的东西：一个 VSCode 串口调试扩展、一个 Android 黑名单清理器，一个三端一致的时薪计算器。</p>
 </section>
 <section class="wrap">
   <div class="project-grid wide">{cards}</div>
@@ -780,7 +798,7 @@ def page_404() -> str:
 
 
 def redirect_page(target: str, label: str = "") -> str:
-    return f"""<!DOCTYPE html>
+    return apply_base(f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
@@ -796,7 +814,7 @@ padding:0 1.2rem;color:#222;line-height:1.8}}a{{color:#a8322d}}</style>
 <p>页面已迁移到 <a href="{esc(target)}">{esc(label or target)}</a>。</p>
 </body>
 </html>
-"""
+""")
 
 
 # --------------------------------------------------------------------------
@@ -906,6 +924,10 @@ def check_links() -> int:
             target = m.group(1)
             if target.startswith("//"):
                 continue
+            if SITE_BASE and target.startswith(SITE_BASE + "/"):
+                target = target[len(SITE_BASE):]
+            elif SITE_BASE and target == SITE_BASE:
+                target = "/"
             local = os.path.join(ROOT, target.lstrip("/").replace("%20", " "))
             if target.endswith("/"):
                 ok = os.path.exists(os.path.join(local, "index.html"))

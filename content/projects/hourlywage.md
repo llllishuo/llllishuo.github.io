@@ -9,7 +9,7 @@ meta: 依赖|无（终端版只要 sh + awk）
 meta: 许可|见仓库
 accent: '#2b6f9e'
 card: /assets/img/projects/hourlywage/card.jpg
-order: 2
+order: 3
 links: 网页版|/demo/hourlywage/
 links: 下载 Windows 版（.exe）|/assets/files/hourlywage.exe
 links: 源码仓库|https://github.com/llllishuo/HourlyWage

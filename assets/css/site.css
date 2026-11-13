@@ -374,6 +374,14 @@ html[data-theme="dark"] .chip {
   transition: transform .3s var(--ease);
 }
 .project-card:hover .card-shot { transform: translateY(-5px) scale(1.02); }
+
+/* 横版截图（如桌面软件）用宽一点的比例 */
+.card-shot.is-wide {
+  width: 66%;
+  height: auto;
+  aspect-ratio: auto;
+  border-radius: 10px;
+}
 html[data-theme="dark"] .card-shot {
   box-shadow: 0 12px 28px -12px rgba(0, 0, 0, .85), 0 0 0 1px rgba(255, 255, 255, .07);
 }
@@ -392,15 +400,24 @@ html[data-theme="dark"] .card-shot {
 /* --- 文章列表 ------------------------------------------------------------ */
 .post-list { display: flex; flex-direction: column; }
 
-.post-row { border-bottom: 1px solid var(--line); }
-.post-row:last-child { border-bottom: 0; }
-
-.post-row-main {
-  display: block;
-  padding: 22px 4px 22px;
+.post-row {
+  position: relative;
+  padding: 22px 4px;
+  border-bottom: 1px solid var(--line);
   transition: padding-left .22s var(--ease);
 }
-.post-row-main:hover { padding-left: 12px; }
+.post-row:last-child { border-bottom: 0; }
+.post-row:hover { padding-left: 16px; }
+
+/* 整行可点：链接铺一层透明遮罩，分类 chip 单独抬到遮罩之上 */
+.post-row-link { display: block; }
+.post-row-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.post-row-meta .chip { position: relative; z-index: 1; }
 
 .post-row-meta {
   display: flex; flex-wrap: wrap; align-items: center; gap: 9px;
@@ -412,7 +429,7 @@ html[data-theme="dark"] .card-shot {
   font-size: 1.14rem; font-weight: 640; letter-spacing: -.01em;
   transition: color .16s var(--ease);
 }
-.post-row-main:hover h3 { color: var(--accent); }
+.post-row:hover h3 { color: var(--accent); }
 .post-row-sub { margin: 0 0 8px; font-size: .88rem; color: var(--ink-2); }
 .post-row-excerpt {
   margin: 0 0 10px;
@@ -679,6 +696,13 @@ html[data-theme="dark"] .filter-chip.is-active {
 }
 .shot img:hover { transform: translateY(-3px) scale(1.012); box-shadow: var(--shadow-lg); }
 .shot figcaption { font-size: .78rem; color: var(--muted); text-align: center; }
+
+/* 两张竖图并排（不拉满整行，避免过高） */
+.shot-grid.two {
+  grid-template-columns: repeat(2, minmax(0, 230px));
+  justify-content: center;
+  gap: 22px;
+}
 
 /* 在线演示 iframe */
 .demo-frame {

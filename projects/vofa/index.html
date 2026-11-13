@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VOFA Serial Studio · Menghan Studio</title>
+<meta name="description" content="串口收发 → 协议解析 → 实时曲线 → 命令点发 → 缓冲导出，整条链路都留在编辑器里。支持 FireWater / JustFloat / Custom，命令库能直接导入 vofa+.cmds.json。">
+<meta name="author" content="MenghanStudio">
+<meta name="keywords" content="嵌入式, Rust, RTOS, C++, 操作系统, 读书笔记, 马列毛, 个人博客, MenghanStudio">
+<link rel="canonical" href="https://llllishuo.github.io/projects/vofa/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Menghan Studio">
+<meta property="og:title" content="VOFA Serial Studio · Menghan Studio">
+<meta property="og:description" content="串口收发 → 协议解析 → 实时曲线 → 命令点发 → 缓冲导出，整条链路都留在编辑器里。支持 FireWater / JustFloat / Custom，命令库能直接导入 vofa+.cmds.json。">
+<meta property="og:url" content="https://llllishuo.github.io/projects/vofa/">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#f6f3ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="Menghan Studio" href="/feed.xml">
+<link rel="stylesheet" href="/assets/css/pygments.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<script>(function(){try{
+var p=new URLSearchParams(location.search).get('theme');
+if(p==='dark'||p==='light'){localStorage.setItem('ms-theme',p);}
+var t=(p==='dark'||p==='light')?p:localStorage.getItem('ms-theme');
+if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
+</head>
+<body class="has-project">
+<a class="skip-link" href="#main">跳到正文</a>
+
+<header class="site-head">
+  <div class="wrap head-row">
+    <a class="brand" href="/" aria-label="Menghan Studio 首页">
+      <span class="brand-mark">孟</span>
+      <span class="brand-text">
+        <strong>Menghan Studio</strong>
+        <em>代码 · 读书 · 折腾</em>
+      </span>
+    </a>
+    <nav class="nav" id="site-nav"><a href="/posts/">文章</a><a href="/categories/">分类</a><a href="/projects/" class="is-active">项目</a><a href="/about/">关于</a></nav>
+    <div class="head-actions">
+      <button class="icon-btn" id="theme-toggle" type="button"
+              aria-label="切换深色/浅色模式" title="切换深色/浅色模式">
+        <span class="ico-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg></span><span class="ico-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z"/></svg></span>
+      </button>
+      <button class="icon-btn menu-btn" id="menu-toggle" type="button"
+              aria-label="展开导航" aria-expanded="false" aria-controls="site-nav"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+</header>
+<main id="main">
+
+<article class="project">
+  <header class="project-head wrap" style="--card-accent:#3f6fb8">
+    <a class="back-link" href="/projects/">← 全部项目</a>
+    <div class="badge-row"><span class="badge">VS Code 扩展</span><span class="badge">TypeScript</span><span class="badge">Canvas 2D</span><span class="badge">MIT</span></div>
+    <h1>VOFA Serial Studio</h1>
+    <p class="project-tagline">把 VOFA+ 的串口调试搬进 VS Code。</p>
+    <div class="hero-actions"><a class="btn btn-primary" href="https://github.com/llllishuo/vofa-vscode" target="_blank" rel="noopener">源码仓库<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a><a class="btn btn-ghost" href="https://github.com/llllishuo/vofa-vscode/releases" target="_blank" rel="noopener">下载 vsix<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a><a class="btn btn-ghost" href="https://github.com/llllishuo/vofa-vscode/blob/main/CHANGELOG.md" target="_blank" rel="noopener">更新日志<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a><a class="btn btn-ghost" href="https://github.com/llllishuo/vofa-vscode/blob/main/docs/releases/v0.2.0.md" target="_blank" rel="noopener">v0.2.0 发布说明<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a></div>
+    <dl class="project-meta"><div><dt>当前版本</dt><dd>v0.2.0</dd></div><div><dt>扩展标识</dt><dd>gutega.vofa-serial-studio</dd></div><div><dt>引擎要求</dt><dd>VS Code ^1.96.0</dd></div><div><dt>开源许可</dt><dd>MIT</dd></div></dl>
+  </header>
+  <div class="wrap project-layout">
+    <div class="prose"><h2 id="它解决什么问题">它解决什么问题</h2>
+<p>写单片机的时候，最常见的动作是：改完固件 → 想看波形 → 切到另一个串口工具 → 重新选端口、波特率、协议 → 波形出来 → 想发条命令试试 → 再切回去改代码。</p>
+<p>VOFA Serial Studio 把这套来回切换砍掉了。它是一个 VS Code 扩展：<strong>串口收发、协议解析、曲线绘制、命令点发、缓冲区导出</strong>都在编辑器里完成，代码和波形并排看。</p>
+<p>界面截图都是无头 Chrome 对生产构建的实际渲染，不是示意图。</p>
+<h2 id="曲线面板">曲线面板</h2>
+<p><img alt="" src="/assets/img/projects/vofa/plot.jpg"></p>
+<p>多标签页、图例实时值、悬停读数、终端日志、状态栏统计都在一个面板里。<strong>通道默认不启用</strong>（在「通道」下拉里点开，或「全选」），悬停读数也只显示已启用的通道。</p>
+<p><img alt="" src="/assets/img/projects/vofa/hover.jpg"></p>
+<p>悬停看各通道数值，滚轮缩放时间轴，<kbd>Shift</kbd>+滚轮缩放 Y 轴，拖动平移，双击回到跟随模式；<kbd>Space</kbd> 暂停，<kbd>A</kbd> 切自动 Y。</p>
+<p>每个标签页有自己的一组「显示哪些通道」，共用同一份采样缓冲——比如「全部通道」和「只看电流」两页来回切。标签页最多 8 个，会持久化，重载窗口后恢复。</p>
+<h2 id="侧边栏">侧边栏</h2>
+<div class="shot-grid two">
+  <figure class="shot">
+    <img src="/assets/img/projects/vofa/sidebar.jpg" alt="侧边栏：串口连接、发送、命令、缓冲区四个折叠块" loading="lazy">
+    <figcaption>串口连接 / 发送 / 命令 / 缓冲区，四个折叠块</figcaption>
+  </figure>
+  <figure class="shot">
+    <img src="/assets/img/projects/vofa/editor.jpg" alt="命令分组编辑：所属分组下拉可把命令移到任意分组" loading="lazy">
+    <figcaption>命令编辑：「所属分组」可移到任意层级</figcaption>
+  </figure>
+</div>
+
+<p>四块都是折叠栏：点标题折叠/展开，折叠后标题右侧仍显示一行摘要（<code>COM5 · 115200 · FireWater</code>、<code>63 条</code>、<code>RX 180.0 kB · 1200 帧</code>）。每块都能拖高、拖顺序，下次打开还是你排的样子。</p>
+<p><strong>设置都在侧边栏，曲线面板只负责展示</strong>：横轴窗口（2s–60s / 全部）、线宽、自动 Y，以及缓冲区容量（采样帧数 5k–200k、原始字节 KB）都在这里改，改完立即生效。</p>
+<h2 id="五个环节">五个环节</h2>
+<div class="feature-grid">
+  <div class="feature">
+    <h4>串口收发</h4>
+    <p>端口枚举、波特率/数据位/停止位/校验/流控/DTR/RTS，收发双向，UTF-8 / GBK / ASCII / Latin1 解码。</p>
+  </div>
+  <div class="feature">
+    <h4>协议解析</h4>
+    <p>FireWater（文本）、JustFloat（float32 + 帧尾）、RawData（原样）、Custom（自定义帧头帧尾 + 8 种数值类型）。</p>
+  </div>
+  <div class="feature">
+    <h4>曲线绘制</h4>
+    <p>Canvas 2D 自绘，逐像素 min/max 降采样；多标签页、缩放平移、自动 Y、滚动窗口、暂停。</p>
+  </div>
+  <div class="feature">
+    <h4>命令库</h4>
+    <p>树状分组、备注、HEX、循环发送与次数；一键导入现有 vofa+.cmds.json，也能导回去。</p>
+  </div>
+  <div class="feature">
+    <h4>缓冲区导出</h4>
+    <p>采样 CSV（宽表/长表）、JSON、原始 .bin、hex dump、收发日志、曲线 PNG。</p>
+  </div>
+  <div class="feature">
+    <h4>无硬件也能验证</h4>
+    <p>内置演示数据源：7 通道合成信号，按真协议编码后再解码，整条链路跑通。</p>
+  </div>
+</div>
+
+<h2 id="固件侧怎么写">固件侧怎么写</h2>
+<p><strong>FireWater（文本，最省事）</strong>：每帧一行，通道用逗号分隔。</p>
+<div class="codehilite"><pre><span></span><code><span class="n">printf</span><span class="p">(</span><span class="s">"%d,%.3f,%.3f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">rpm</span><span class="p">,</span><span class="w"> </span><span class="n">iq</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">);</span>
+</code></pre></div>
+
+<p>字段可以带名字，<code>sin:0.5,cos:0.8</code> 会直接显示在图例上；纯日志行会被忽略，可以和数字行混在同一个串口里。注意 newlib-nano 下浮点 printf 要加 <code>-u _printf_float</code>，否则打出来是空的。</p>
+<p><strong>JustFloat（二进制，最省带宽）</strong>：N 个小端 float32 + 4 字节帧尾 <code>00 00 80 7F</code>。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">kTail</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mh">0x00</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00</span><span class="p">,</span><span class="w"> </span><span class="mh">0x80</span><span class="p">,</span><span class="w"> </span><span class="mh">0x7F</span><span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">vofa_justfloat</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="o">*</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">uart_write</span><span class="p">((</span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">));</span><span class="w">  </span><span class="cm">/* 小端 CPU 直接发 */</span>
+<span class="w">    </span><span class="n">uart_write</span><span class="p">(</span><span class="n">kTail</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">kTail</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Cortex-M 全系小端，<code>float</code> 数组可以直接当字节数组发；帧尾不能省，解析器靠它切帧，帧内通道数由帧长自动推断，偶发杂字节会自动重同步。</p>
+<p><strong>Custom</strong> 适合已有自有协议的固件——不用改下位机，把帧头帧尾填对就行：</p>
+<div class="codehilite"><pre><span></span><code>AA 55 | float32 × N | 0D 0A
+</code></pre></div>
+
+<h2 id="安装">安装</h2>
+<p><strong>方式 A：装 vsix（推荐）</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c"># 从 Releases 下载最新的 .vsix，或自己打一个</span>
+<span class="n">npm</span> <span class="n">install</span>
+<span class="n">npm</span> <span class="n">run</span> <span class="n">package</span>                       <span class="c"># 产出 vofa-serial-studio-&lt;version&gt;.vsix</span>
+<span class="n">code</span> <span class="p">-</span><span class="n">-install-extension</span> <span class="p">.\</span><span class="n">vofa-serial-studio</span><span class="p">-</span><span class="n">0</span><span class="p">.</span><span class="n">2</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">vsix</span>
+</code></pre></div>
+
+<p>装完重启或重载 VS Code 窗口。</p>
+<p><strong>方式 B：源码调试</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">://</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">llllishuo</span><span class="p">/</span><span class="n">vofa-vscode</span><span class="p">.</span><span class="n">git</span>
+<span class="nb">cd </span><span class="n">vofa-vscode</span>
+<span class="n">npm</span> <span class="n">install</span>
+<span class="n">npm</span> <span class="n">run</span> <span class="n">compile</span>
+</code></pre></div>
+
+<p>用 VS Code 打开该目录，按 <kbd>F5</kbd> 启动扩展开发宿主。</p>
+<div class="codehilite"><pre><span></span><code><span class="n">npm</span> <span class="n">run</span> <span class="n">typecheck</span>   <span class="c"># tsc --noEmit</span>
+<span class="n">npm</span> <span class="n">test</span>            <span class="c"># 协议/环形缓冲/导出/命令树 + 会话级全链路 + 激活冒烟（353 项）</span>
+</code></pre></div>
+
+<h2 id="快速上手">快速上手</h2>
+<ol class="steps">
+  <li><strong>打开侧边栏</strong><p>左侧活动栏点 VOFA 图标 → 「串口 / 命令」。</p></li>
+  <li><strong>连上串口</strong><p>选端口（如 <code>COM5 — USB-SERIAL CH340</code>）和波特率，点「连接」。</p></li>
+  <li><strong>看波形</strong><p>选协议（默认 FireWater）→ 点右上「曲线」，波形即时出现；再点一次「关闭」收起面板。</p></li>
+  <li><strong>没有硬件？</strong><p>点「演示」，7 通道合成信号立刻跑起来。</p></li>
+</ol>
+
+<h2 id="命令库与-vofa-互操作">命令库与 VOFA+ 互操作</h2>
+<p>命令里保存的永远是<strong>十六进制字节</strong>（和 VOFA+ 的 <code>cmd_hex</code> 一致），所以文本、HEX、非打印字节都不会在往返中丢失。</p>
+<ul>
+<li>点击命令名 = 发送一次；点 <code>⟳</code> = 按间隔循环发送（运行中显示 <code>■</code> 和绿点）</li>
+<li><strong>自动保存</strong>：命令库是真实文件，改完 400 ms 落盘——有工作区时写在 <code>&lt;工作区&gt;/.vscode/vofa.commands.json</code>（可以进 git、直接 diff），没有工作区时写扩展全局存储</li>
+<li><code>↧</code> 默认指向 <code>%LOCALAPPDATA%\VOFA+\&lt;version&gt;\context\vofa+.cmds.json</code>，63 条命令、分组、备注、循环参数原样进来</li>
+<li><code>↥</code> 可以把当前命令库导出成 VOFA+ 格式，两边随时倒</li>
+<li>命令面板（<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> → <code>VOFA: 发送已保存的命令…</code>）支持按路径模糊搜索</li>
+</ul>
+<h2 id="缓冲区与导出">缓冲区与导出</h2>
+<table>
+<thead>
+<tr>
+<th>导出项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>采样 CSV（宽表）</td>
+<td><code>序号,时间(ms),sin,sqr,…</code> 一行一帧，与 VOFA+ 宽表一致（带 BOM，Excel 直接开）</td>
+</tr>
+<tr>
+<td>采样 CSV（长表）</td>
+<td><code>序号,时间(ms),通道名称,数值</code>，与 VOFA+ 长表一致</td>
+</tr>
+<tr>
+<td>采样 JSON</td>
+<td><code>{channels:[…], count, time:[…], data:[[ch0…],[ch1…]]}</code></td>
+</tr>
+<tr>
+<td>原始 <code>.bin</code></td>
+<td>接收到的字节原样保存，可用于离线复现</td>
+</tr>
+<tr>
+<td>原始 hex</td>
+<td>带偏移与 ASCII 列的 hex dump</td>
+</tr>
+<tr>
+<td>接收日志</td>
+<td><code>[相对秒] RX/TX/SYS 文本</code>，含发送记录</td>
+</tr>
+<tr>
+<td>曲线 PNG</td>
+<td>当前画布截图</td>
+</tr>
+</tbody>
+</table>
+<p>缓冲容量默认 50000 帧（对齐 VOFA+ 的 <code>buffer_max_size</code>），原始字节 4 MB，都能在侧边栏改。</p>
+<h2 id="性能">性能</h2>
+<p>两个负载测试台可复现（<code>tools/load/</code>）。200 帧/秒 × 7 通道、10 秒同口径结果：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>0.1.2</th>
+<th>0.1.3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>扩展宿主最长卡顿</td>
+<td>674 ms</td>
+<td>无 &gt; 60 ms</td>
+</tr>
+<tr>
+<td>扩展宿主事件循环 p95 / max</td>
+<td>49.4 / 673.9 ms</td>
+<td>13.5 / 33.6 ms</td>
+</tr>
+<tr>
+<td>扩展宿主 CPU</td>
+<td>5.0 %</td>
+<td>2.5 %</td>
+</tr>
+<tr>
+<td>曲线 webview 帧间隔 p95</td>
+<td>33.4 ms</td>
+<td>16.7 ms</td>
+</tr>
+<tr>
+<td>曲线 webview 长任务</td>
+<td>8 次 / 520 ms</td>
+<td>0 次</td>
+</tr>
+</tbody>
+</table>
+<p>维持这个数字靠四条约束：热路径不加载原生模块（<code>require('serialport')</code> 首次约 700 ms）、回填上限 20000 帧且只在 webview 新挂载时发、按需重绘（空闲 0 帧开销）、跨视图改动走会话事件。</p>
+<h2 id="设计约定">设计约定</h2>
+<p>这些不是「尽量做到」，而是由工具或测试强制的：</p>
+<ol>
+<li><strong>一条消息只有一个处理处</strong>：<code>ViewBridge.onMessage</code> 的 <code>default</code> 是 <code>const unhandled: never = msg</code>，往消息类型里加一条却不处理 → 编译失败</li>
+<li><strong>配置只有一张表</strong>：<code>PREF_SPECS</code> 定义键/路径/类型/默认值/范围，单测逐项比对 <code>package.json</code>，漂移就红</li>
+<li><strong>webview 不能碰宿主模块</strong>：冒烟测试扫描 <code>dist/webview/*.js</code>，出现 <code>vscode</code> / <code>serialport</code> 即失败</li>
+<li><strong>不可信数字在边界夹紧</strong>：<code>settings.json</code> 可被手改，分配内存前用安全范围夹紧</li>
+<li><strong>无死代码</strong>：<code>noUnusedLocals</code> / <code>noUnusedParameters</code>，当前 0 告警</li>
+</ol>
+<h2 id="已知限制">已知限制</h2>
+<ul>
+<li>只做 <code>FireWater / JustFloat / RawData / Custom</code> 四种解析；VOFA+ 的 TCP/UDP 数据源、3D 组件、按钮面板没有移植</li>
+<li>曲线是 Canvas 2D 自绘，<strong>没有每通道独立 Y 轴</strong>（VOFA+ 的「子图」），目前是共用 Y 轴 + 通道显隐</li>
+<li>macOS / Linux 理论上可用（serialport 有对应预编译二进制，设备名用 <code>ttyUSB*</code>），但只在 Windows 上验证过</li>
+</ul>
+<h2 id="许可">许可</h2>
+<p>MIT。</p></div>
+    
+  <aside class="post-toc" aria-label="目录">
+    <p class="toc-title">本页内容</p>
+    <ul>
+<li><a href="#它解决什么问题">它解决什么问题</a></li>
+<li><a href="#曲线面板">曲线面板</a></li>
+<li><a href="#侧边栏">侧边栏</a></li>
+<li><a href="#五个环节">五个环节</a></li>
+<li><a href="#固件侧怎么写">固件侧怎么写</a></li>
+<li><a href="#安装">安装</a></li>
+<li><a href="#快速上手">快速上手</a></li>
+<li><a href="#命令库与-vofa-互操作">命令库与 VOFA+ 互操作</a></li>
+<li><a href="#缓冲区与导出">缓冲区与导出</a></li>
+<li><a href="#性能">性能</a></li>
+<li><a href="#设计约定">设计约定</a></li>
+<li><a href="#已知限制">已知限制</a></li>
+<li><a href="#许可">许可</a></li>
+</ul>
+  </aside>
+  </div>
+</article>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-row">
+    <div class="foot-brand">
+      <span class="brand-mark small">孟</span>
+      <p>Menghan Studio · 记录学习与思考<br>
+      <span class="muted">本博客内容仅作学习交流</span></p>
+    </div>
+    <div class="foot-links">
+      <a href="/posts/">全部文章</a>
+      <a href="/categories/">分类</a>
+      <a href="/projects/">项目</a>
+      <a href="https://github.com/llllishuo" rel="noopener">GitHub</a>
+      <a href="mailto:1756524586@qq.com">邮箱</a>
+      <a href="/feed.xml">RSS</a>
+    </div>
+  </div>
+  <div class="wrap foot-base">
+    <span>© 2026 MenghanStudio</span>
+    <span>由 Python 生成的静态站点</span>
+  </div>
+</footer>
+<script src="/assets/js/site.js" defer></script>
+</body>
+</html>

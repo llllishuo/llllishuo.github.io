@@ -9,7 +9,7 @@ meta: 平台|Android 9 及以上
 meta: 开源许可|Apache-2.0
 accent: '#3f8f74'
 card: /assets/img/projects/fuckoff/card.jpg
-order: 1
+order: 2
 links: 源码仓库|https://github.com/llllishuo/FuckOffApp
 links: 更新日志（v1.7.0）|https://github.com/llllishuo/FuckOffApp/blob/main/release-notes/v1.7.0.md
 links: 四种清理方式的风险说明|https://github.com/llllishuo/FuckOffApp/blob/main/CLEANUP_RISKS.md
